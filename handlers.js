@@ -16,7 +16,7 @@ module.exports = {
 		var args = querystring.parse(query);
 		
 		var table = "";
-		if(args.c == "prerouting" || args.c == "postrouting") {
+		if(args.c === "prerouting" || args.c === "postrouting") {
 			table = " -t nat ";
 		}
 		
@@ -32,14 +32,17 @@ module.exports = {
 		var query = url.parse(req.url).query;
 		var args = querystring.parse(query);
 		
-		proc.exec("iptables -D " + args.c.toUpperCase() + " " + args.i, function(error, stdout, stderr) {
+		var table = "";
+		if(args.c === "prerouting" || args.c === "postrouting") {
+			table = " -t nat ";
+		}
+		
+		proc.exec("iptables " + table + " -D " + args.c.toUpperCase() + " " + args.i, function(error, stdout, stderr) {
 			module.exports.showChannel(req, res);
 		});
 	},
 	
 	insertRule: function (req, res) {
-		var query = url.parse(req.url).query;
-		
 		var body = '';
 	    req.on('data', function (data) {
 	        body += data;
@@ -60,35 +63,12 @@ module.exports = {
 	    });
 	},
 	
-	replaceRule: function (req, res) {
-		var query = url.parse(req.url).query;
-		
-		var body = '';
-	    req.on('data', function (data) {
-	        body += data;
-	    });
-	    req.on('end', function () {
-	        var post = querystring.parse(body);
-	        
-	        var rule = post['rule'];
-	        console.log(rule);
-	    	proc.exec("iptables -R " + args.i + " " + rule, function(error, stdout, stderr) {
-	    		if(stderr) {
-	    			res.end(stderr);
-	    		}
-	    		else {
-	    			module.exports.showChannel(req, res);
-	    		}
-	    	});
-	    });
-	},
-	
 	monitor: function(req, res) {
 		var query = url.parse(req.url).query;
 		var args = querystring.parse(query);
 		
 		var table = "";
-		if(args.c == "prerouting" || args.c == "postrouting") {
+		if(args.c === "prerouting" || args.c === "postrouting") {
 			table = " -t nat ";
 		}
 		

@@ -8,7 +8,6 @@ handles["/"] = handle.index;
 handles["/channel"] = handle.showChannel;
 handles["/delete"] = handle.deleteRule;
 handles["/insert"] = handle.insertRule;
-handles["/replace"] = handle.replaceRule;
 handles["/mon"] = handle.monitor;
 
 http.createServer(function handler(req, res) {
