@@ -30,6 +30,7 @@ $(document).ready(function(){
 });
 
 var LANS = {};
+var FIN_RULES = new Set(["drop", "accept", "log", "tcpmss", "return", "dnat", "masquerade"]);
 
 function makeRuleText(text) {
 	
@@ -40,6 +41,14 @@ function makeRuleText(text) {
 	text = text.replace(/(--dport) ([0-9\.\/]+)/g, '$1 <span class="port">$2</span>');
 	
 	text = text.replace(/(ACCEPT|DROP)/g, '<span class="$1">$1</span>');
+	
+	text = text.replace(/-j ([A-Z\_]+)/g, function(str, name) {
+		var lname = name.toLowerCase();
+		if(FIN_RULES.has(lname)) {
+			return "-j " + name;
+		}
+		return '-j <a href="javascript: selectChannel(\'' + lname + '\');">' + name + "</a>";
+	});
 	
 	return text;
 }
@@ -87,6 +96,9 @@ function editRuleAction(key) {
 		editRuleRow.html(makeRuleText(text = editRuleRow.children().val()));
 		editRuleRow = null;
 		text = text.replace("-A " + channel.toUpperCase(), "-R " + channel.toUpperCase() + " " + editRuleRowIndex); 
+		if(channel == "prerouting" || channel == "postrouting") {
+			text = "-t nat " + text;
+		}
 		$.post("insert?c=" + channel, {rule: text}, function(data){
 			if(data) {
 				if(data.substr(0, 1) == "[") {
