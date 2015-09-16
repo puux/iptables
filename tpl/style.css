@@ -1,5 +1,6 @@
 input {
 	width: 100%;
+	margin: 0;
 }
 html, body {
 	padding: 0;
@@ -21,7 +22,7 @@ html, body {
 }
 
 .main .mon {
-	width: 90px;
+	width: 46px;
 	color: white;
 	text-align: center;
 	background-color: gray;
@@ -43,12 +44,25 @@ html, body {
 	background-color: #ddd;
 }
 
-.drop {
+.main .rowright {
+	background-color: #ddd;
+	text-align: right;
+}
+
+.DROP {
 	color: red;
 }
 
-.accept {
+.ACCEPT {
 	color: green;
+}
+
+.net {
+	color: gray;
+}
+
+.port {
+	color: blue;
 }
 
 .error {

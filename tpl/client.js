@@ -8,16 +8,19 @@ $(document).ready(function(){
 			var arr = JSON.parse(data);
 			var index = 0;
 			for(var i = 0; i < arr.length; i++) {
-				var items = arr[i].replace(/[ ]+/g,' ').split(" ");
+				var items = arr[i].trim().replace(/[ ]+/g, ' ').split(" ");
 
 				if(i == 0) {
-					text = items[4] + "/" + items[6];
+					pkts = 4;
+					bytes = 6;
 				}
 				else {
-					text = items[1] + "/" + items[2];
+					pkts = 0;
+					bytes = 1;
 				}
 				
-				$("#mon" + index).html(text);
+				$("#pkts" + index).html(items[pkts]);
+				$("#bytes" + index).html(items[bytes]);
 				if(i != 1) {
 					index++;
 				}
@@ -26,31 +29,19 @@ $(document).ready(function(){
 	}, 1000);
 });
 
-var FIN_RULES = new Set(["drop", "accept", "log", "tcpmss", "return", "dnat", "masquerade"]);
+var LANS = {};
 
 function makeRuleText(text) {
-	var arr = text.split(" ");
 	
-	var ruleIndex = -1;
-	for(var i = 0; i < arr.length && ruleIndex == -1; i++) {
-		if(arr[i] == "-j") {
-			ruleIndex = i;
-		}
-	}
+	text = text.replace(/(-[o|i]) ([a-z0-9]+)/g, function(str, dir, int){
+		return dir + ' <b>' + (LANS[int] || int) + '</b>';
+	});
+	text = text.replace(/(\-d|\-s|\-\-to\-destination) ([0-9\.\/]+)/g, '$1 <span class="net">$2</span>');
+	text = text.replace(/(--dport) ([0-9\.\/]+)/g, '$1 <span class="port">$2</span>');
 	
-	if(ruleIndex != -1) {
-		ruleIndex++;
-		var rule = arr[ruleIndex].toLowerCase();
-		
-		if(FIN_RULES.has(rule)) {
-			arr[ruleIndex] = '<span class="' + rule + '">' + arr[ruleIndex] + "</span>";
-		}
-		else {
-			arr[ruleIndex] = '<a href="javascript: selectChannel(\'' + rule + '\');">' + arr[ruleIndex] + "</a>";
-		}
-	}
+	text = text.replace(/(ACCEPT|DROP)/g, '<span class="$1">$1</span>');
 	
-	return arr.join(" ");
+	return text;
 }
 
 function makeRule(index, text) {
@@ -58,7 +49,8 @@ function makeRule(index, text) {
 	
 	return "<tr>" +
 			'<td class="row" id="lindx">' + index + "</td>" +
-			'<td class="row" id="mon' + index + '"></td>' +
+			'<td class="rowright" id="pkts' + index + '"></td>' +
+			'<td class="rowright" id="bytes' + index + '"></td>' +
 			'<td class="row" id="rule' + index + '" onclick="editRule(' + index + ')">' + ntext + "</td>" +
 			'<td class="row"><a href="javascript: deleteRule(' + index + ');">del</a>' + "</td>" +
 			"</tr>";
@@ -111,7 +103,7 @@ function editRuleAction(key) {
 function parseChannels(data) {
 	var arr = JSON.parse(data);
 	
-	$(".main").html('<tr><td class="id">ID</td><td class="mon">MONITOR</td><td class="rule">RULE</td><td class="cmd">CMD</td></tr>');
+	$(".main").html('<tr><td class="id">ID</td><td class="mon">pkts</td><td class="mon">bytes</td><td class="rule">RULE</td><td class="cmd">CMD</td></tr>');
 
 	var index = 0;
 	for(line in arr) {
@@ -122,7 +114,7 @@ function parseChannels(data) {
 		index++;
 	}
 	
-	$(".main").append('<tr><td></td><td></td><td><form onsubmit="return insertRule();"><input type="text" id="rule"/></form></td><td></td></tr>');
+	$(".main").append('<tr><td colspan="3"></td><td colspan="1"><form onsubmit="return insertRule();"><input type="text" id="rule"/></form></td><td></td></tr>');
 }
 
 function selectChannel(name) {
@@ -138,6 +130,9 @@ function deleteRule(index) {
 
 function insertRule() {
 	var text = $("#rule").val();
+	if(channel == "prerouting" || channel == "postrouting") {
+		text = "-t nat " + text;
+	}
 	$.post("insert?c=" + channel, {rule: text}, function(data){
 		if(data) {
 			if(data.substr(0, 1) == "[") {
