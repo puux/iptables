@@ -1,0 +1,114 @@
+input {
+	width: 100%;
+}
+html, body {
+	padding: 0;
+	margin: 0;
+}
+
+.main {
+	border: 1px solid grey;
+	background-color: #eee;
+	width: 100%;
+	margin-top: 10px;
+}
+
+.main .id {
+	width: 30px;
+	color: white;
+	text-align: center;
+	background-color: gray;
+}
+
+.main .mon {
+	width: 90px;
+	color: white;
+	text-align: center;
+	background-color: gray;
+}
+
+.main .rule {
+	color: white;
+	text-align: center;
+	background-color: gray;
+}
+
+.main .cmd {
+	width: 70px;
+	color: white;
+	background-color: gray;
+}
+
+.main .row {
+	background-color: #ddd;
+}
+
+.drop {
+	color: red;
+}
+
+.accept {
+	color: green;
+}
+
+.error {
+	width: 100%;
+	color: white;
+	padding: 15px;
+	text-align: center;
+	display: none;
+	border: 1px solid red;
+	background-color: #f88;
+	cursor: pointer;
+	position: static;
+}
+
+.content {
+	width: 1000px;
+	margin: auto;
+}
+
+.mainmenu {
+	border: 1px solid gray; color: white;  margin: 5px auto 0;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	padding: 3px; text-align: center;
+	background: -webkit-gradient(linear, 0 0, 0 100%, from(#555), to(#444));
+	background: -moz-linear-gradient(top,  #555,  #444);
+	background-image: -o-linear-gradient(top,  #555,  #444);
+	background: -ms-linear-gradient(top,  #555,  #444);
+}
+
+ul.tabs		{ display: table; padding: 0 0px; list-style: none; position: relative; }
+ul.tabs li	{ margin: 0; padding: 0; list-style: none; display: table-cell; float: left; position: relative; }
+ul.tabs li:hover	{ 
+	background: -webkit-gradient(linear, 0 0, 0 100%, from(#666), to(#555));
+	background: -moz-linear-gradient(top,  #666,  #555);
+	background-image: -o-linear-gradient(top,  #666,  #555);
+	background: -ms-linear-gradient(top,  #666,  #555);
+}
+ul.tabs li:hover:first-child	{
+	border-top-left-radius: 5px; border-bottom-left-radius: 5px;
+}
+ul.tabs li:hover:last-child	{
+	border-top-right-radius: 5px; border-bottom-right-radius: 5px;
+}
+ul.tabs a	{ position: relative; display: block; }
+ul.tabs .item {
+		color:white; padding: 4px 15px;
+		text-decoration: none; /*margin-right: 5px;*/
+}
+ul.tabs .itemselect {
+		color:white; padding: 4px 15px;
+		text-decoration: none; /*margin-right: 5px;*/
+		background-color: black;
+}
+ul.tabs .last {
+		color:white; padding: 3px 15px; width: auto; margin-right: -1px;
+		text-decoration: none; /*margin-right: 5px;*/
+		background: -webkit-gradient(linear, 0 0, 0 100%, from(#555), to(#222));
+		background: -moz-linear-gradient(top,  #555,  #222);
+		background-image: -o-linear-gradient(top,  #555,  #222);
+		background: -ms-linear-gradient(top,  #555,  #222);
+}

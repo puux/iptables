@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	
+	<link rel="stylesheet" href="style.css" type="text/css"/>
+	
+	<script type="text/javascript" src="jquery.min.js"></script> 
+	<script type="text/javascript" src="client.js"></script>
+
+	<title>iptables</title>
+</head>
+
+<body>
+
+<div class="error"></div>
+
+<div class="content">
+	<ul class="tabs mainmenu">
+		<li><a class="item" href="javascript: selectChannel('input');">INPUT</a></li>
+		<li><a class="item" href="javascript: selectChannel('output');">OUTPUT</a></li>
+		<li><a class="item" href="javascript: selectChannel('forward');">FORWARD</a></li>
+		<li><a class="item" href="javascript: selectChannel('prerouting');">PREROUTING</a></li>
+		<li><a class="item" href="javascript: selectChannel('postrouting');">POSTROUTING</a></li>
+	</ul>
+	
+	<table class="main">
+		
+	</table>
+</div>
+
+</body>
+
+</html>
