@@ -1,12 +1,18 @@
 input {
 	width: 100%;
 	margin: 0;
+    border: 1px solid gray;
 }
 html, body {
 	padding: 0;
 	margin: 0;
 }
 
+.ruleeditor {
+    font-family: monospace;
+}
+
+/* Table styles */
 .main {
 	border: 1px solid grey;
 	background-color: #eee;
@@ -42,6 +48,7 @@ html, body {
 
 .main .row {
 	background-color: #ddd;
+    height: 21px;
 }
 
 .main .rowright {
@@ -49,6 +56,7 @@ html, body {
 	text-align: right;
 }
 
+/* Highlight styles */
 .DROP {
 	color: red;
 }

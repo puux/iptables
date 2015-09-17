@@ -9,11 +9,10 @@ handles["/channel"] = handle.showChannel;
 handles["/delete"] = handle.deleteRule;
 handles["/insert"] = handle.insertRule;
 handles["/mon"] = handle.monitor;
+handles["/save"] = handle.save;
 
 http.createServer(function handler(req, res) {
     var pathname = url.parse(req.url).pathname;
-    
-    console.log("Request for " + pathname + " received.");
     
     req.setEncoding("utf8");
     

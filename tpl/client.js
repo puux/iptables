@@ -25,7 +25,7 @@ var parser = {
 			index++;
 		}
 
-		$(".main").append('<tr><td colspan="3"></td><td colspan="1"><form onsubmit="return rules.insert();"><input type="text" id="rule"/></form></td><td></td></tr>');
+		$(".main").append('<tr><td colspan="3"></td><td colspan="1"><form onsubmit="return rules.insert();"><input type="text" id="rule" class="ruleeditor"/></form></td><td></td></tr>');
 	},
 	
 	makeRuleTpl: function (index, text) {
@@ -40,7 +40,7 @@ var parser = {
 				"</tr>";
 	},
 	
-	LANS: {},
+	LANS: {},   // eth0: "LAN"
 	FIN_RULES: new Set(["drop", "accept", "log", "tcpmss", "return", "dnat", "masquerade"]),
 	makeRuleText: function (text) {
 		text = text
@@ -68,26 +68,14 @@ var parser = {
 		if(key === 27) {
 			if(this.editRuleRow) {
 				this.editRuleRow.html(this.editRuleRowText);
-				this.editRuleRow = null;
+				this.endEditRule();
 			}
 		}
 		else if(key === 13) {
 			this.editRuleRow.html(this.makeRuleText(text = this.editRuleRow.children().val()));
-			this.editRuleRow = null;
+			this.endEditRule();
 			text = text.replace("-A " + channel.toUpperCase(), "-R " + channel.toUpperCase() + " " + this.editRuleRowIndex); 
-			if(channel === "prerouting" || channel === "postrouting") {
-				text = "-t nat " + text;
-			}
-			$.post("insert?c=" + channel, {rule: text}, function(data){
-				if(data) {
-					if(data.substr(0, 1) === "[") {
-						parser.parseChannels(data);
-					}
-					else {
-						showError(data);
-					}
-				}
-			});
+			rules.insertText(text);
 		}
 	},
 
@@ -99,13 +87,17 @@ var parser = {
 			}
 			var value = rule.text();
 			this.editRuleRowText = rule.html();
-			rule.html('<input type="text" onkeyup="parser.editRuleAction(event.keyCode);"/>').children().val(value);
+			rule.html('<input type="text" onkeyup="parser.editRuleAction(event.keyCode);" class="ruleeditor"/>').children().val(value);
 			rule.children().focus();
 
 			this.editRuleRow = rule;
 			this.editRuleRowIndex = index;
 		}
-	}
+	},
+    
+    endEditRule: function() {
+        this.editRuleRow = null;
+    }
 	
 };
 
@@ -113,6 +105,7 @@ var rules = {
 	showList: function (name) {
 		channel = name;
 
+        parser.endEditRule();
 		$.get("channel?c=" + name, parser.parseChannels);
 	},
 	
@@ -122,13 +115,21 @@ var rules = {
 	},
 	
 	insert: function () {
-		var text = $("#rule").val();
-		if(text.indexOf("-A") === -1 && text.indexOf("-I") === -1) {
+		this.insertText($("#rule").val());
+    },
+    
+    insertText: function (text) {
+		if(text.search(/-[A|I|R]/g) === -1) {
 			text = "-A " + channel.toLocaleUpperCase() + " " + text ;
 		}
 		if(channel === "prerouting" || channel === "postrouting") {
 			text = "-t nat " + text;
 		}
+        
+        for(var lan in parser.LANS) {
+            text = text.replace(new RegExp(parser.LANS[lan], 'g'), lan);
+        }
+        
 		$.post("insert?c=" + channel, {rule: text}, function(data){
 			if(data) {
 				if(data.substr(0, 1) === "[") {

@@ -78,5 +78,12 @@ module.exports = {
 			
 			res.end(JSON.stringify(arr));
 		});
-	}
+	},
+    
+    save: function(req, res) {
+        proc.exec("iptables-save > /etc/iptables/rules.save", function(error, stdout, stderr) {
+
+			res.end(stderr);
+		});
+    }
 };
