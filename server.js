@@ -10,6 +10,7 @@ handles["/delete"] = handle.deleteRule;
 handles["/insert"] = handle.insertRule;
 handles["/mon"] = handle.monitor;
 handles["/save"] = handle.save;
+handles["/settings"] = handle.settings;
 
 http.createServer(function handler(req, res) {
     var pathname = url.parse(req.url).pathname;

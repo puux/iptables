@@ -35,13 +35,13 @@ var parser = {
 				'<td class="row" id="lindx">' + index + "</td>" +
 				'<td class="rowright" id="pkts' + index + '"></td>' +
 				'<td class="rowright" id="bytes' + index + '"></td>' +
-				'<td class="row" id="rule' + index + '" onclick="parser.editRule(' + index + ')">' + ntext + "</td>" +
-				'<td class="row"><a href="#" onclick="return rules.remove(' + index + ');">del</a>' + "</td>" +
+				'<td class="row" id="rule' + index + '"><span class="edittext">' + ntext + '<img class="edit" src="/img/edit.png" onclick="parser.editRule(' + index + ')"/></spawn></td>' +
+				'<td class="row"><a href="#" onclick="return rules.remove(' + index + ');" title="Delete"><img src="/img/delete.png"/></a>' + "</td>" +
 				"</tr>";
 	},
 	
 	LANS: {},   // eth0: "LAN"
-	FIN_RULES: new Set(["drop", "accept", "log", "tcpmss", "return", "dnat", "masquerade"]),
+	FIN_RULES: ["drop", "accept", "log", "tcpmss", "return", "dnat", "masquerade"],
 	makeRuleText: function (text) {
 		text = text
 			.replace(/(-[o|i]) ([a-z0-9]+)/g, function(str, dir, int){
@@ -52,7 +52,7 @@ var parser = {
 			.replace(/(ACCEPT|DROP)/g, '<span class="$1">$1</span>')
 			.replace(/-j ([A-Z\_]+)/g, function(str, name) {
 				var lname = name.toLowerCase();
-				if(parser.FIN_RULES.has(lname)) {
+				if(parser.FIN_RULES[lname]) {
 					return "-j " + name;
 				}
 				return '-j <a href="javascript: rules.showList(\'' + lname + '\');">' + name + "</a>";
@@ -104,6 +104,13 @@ var parser = {
 var rules = {
 	showList: function (name) {
 		channel = name;
+		
+		$(".itemselect").removeClass("itemselect").addClass("item");
+		$(".item").each(function(index, obj) {
+			if($(obj).text() === name.toUpperCase()) {
+				$(obj).removeClass("item").addClass("itemselect");
+			}
+		});
 
         parser.endEditRule();
 		$.get("channel?c=" + name, parser.parseChannels);
@@ -173,8 +180,29 @@ var rules = {
 
 };
 
-function showError(text) {
-	$(".error").html(text).fadeIn().click(function(){
-		$(this).fadeOut();
-	});
-}
+var tools = {
+	save: function() {
+		$.get("/save", function(data) {
+			if(data) {
+				showError(data);
+			}
+		});
+	},
+	
+	settingsDlg: function() {
+		$(".settings").dialog({
+			title:"Iptables settingss",
+			modal:true,
+			resizable:false,
+			width: 400,
+			buttons: [
+				{
+					text: "Save",
+					click: function() {
+						$(".settings").dialog("close");
+					}
+				}
+			]
+		})
+	}
+};

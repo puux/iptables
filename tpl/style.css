@@ -6,6 +6,7 @@ input {
 html, body {
 	padding: 0;
 	margin: 0;
+	font-size: 12px;
 }
 
 .ruleeditor {
@@ -54,6 +55,17 @@ html, body {
 .main .rowright {
 	background-color: #ddd;
 	text-align: right;
+}
+
+.main .row .edit {
+	display: none;
+	cursor: pointer;
+	position: absolute;
+	margin-top: 0px;
+}
+
+.main .row .edittext:hover .edit {
+	display: inherit;
 }
 
 /* Highlight styles */
@@ -133,4 +145,37 @@ ul.tabs .last {
 		background: -moz-linear-gradient(top,  #555,  #222);
 		background-image: -o-linear-gradient(top,  #555,  #222);
 		background: -ms-linear-gradient(top,  #555,  #222);
+}
+
+.tools	{ padding: 10px; height: 24px; text-align: center; }
+.tools .button			{
+	border: 1px solid gray; color: white; padding: 6px; text-decoration: none; float:right; cursor: pointer; height: 15px; margin-left: 5px;  border-radius: 5px;
+			background: -webkit-gradient(linear, 0 0, 0 100%, from(#333), to(#222));
+			background: -moz-linear-gradient(top,  #333,  #222);
+			background-image: -o-linear-gradient(top,  #333,  #222);
+			background: -ms-linear-gradient(top,  #333,  #222);
+			border: 1px solid #444;
+			box-shadow: 0 0 5px #444;
+}
+.tools .button:hover	{ 
+			background: -webkit-gradient(linear, 0 0, 0 100%, from(#222), to(#000));
+			background: -moz-linear-gradient(top,  #444,  #333);
+			background-image: -o-linear-gradient(top,  #444,  #333);
+			background: -ms-linear-gradient(top,  #444,  #333);
+}
+.tools .button[disabled=disabled] 	{ background-color: #ccc; color:#999;
+										background: -webkit-gradient(linear, 0 0, 0 100%, from(#444), to(#333));
+										background: -moz-linear-gradient(top,  #444,  #333);
+										background-image: -o-linear-gradient(top,  #444,  #333);
+										background: -ms-linear-gradient(top,  #444,  #333);
+										cursor: default; }
+.tools .icon			{ float: right; margin: 0 4px; }
+
+
+.settings {
+	display: none;
+	border: 1px solid gray;
+	background-color: silver;
+	width: 400px;
+	height: 200px;
 }

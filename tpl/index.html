@@ -5,8 +5,11 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	
 	<link rel="stylesheet" href="style.css" type="text/css"/>
+	<link rel="stylesheet" href="jquery-ui.css" type="text/css"/>
 	
 	<script type="text/javascript" src="jquery.min.js"></script> 
+	<script type="text/javascript" src="jquery-ui.min.js"></script> 
+	<script type="text/javascript" src="tools.js"></script>
 	<script type="text/javascript" src="client.js"></script>
 
 	<title>iptables</title>
@@ -24,10 +27,23 @@
 		<li><a class="item" href="javascript: rules.showList('prerouting');">PREROUTING</a></li>
 		<li><a class="item" href="javascript: rules.showList('postrouting');">POSTROUTING</a></li>
 	</ul>
-	
+		
 	<table class="main">
 		
 	</table>
+	
+	<div class="tools">
+		<a class="button" onclick="tools.save();">Save <img class="icon" src="/img/save.png"/></a>
+		<a class="button" onclick="tools.settingsDlg();">Settings <img class="icon" src="/img/settings.png"/></a>
+	</div>
+	
+	<div class="settings">
+		<table>
+			<tr>
+				<td>Save rule path</td><td></td>
+			</tr>
+		</table>
+	</div>
 </div>
 
 </body>
