@@ -116,6 +116,8 @@ var rules = {
 	
 	insert: function () {
 		this.insertText($("#rule").val());
+		
+		return false;
     },
     
     insertText: function (text) {
