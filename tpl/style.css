@@ -179,3 +179,10 @@ ul.tabs .last {
 	width: 400px;
 	height: 200px;
 }
+
+#user-select-category			{ height: 200px; width: 140px; border: 1px solid #444; background-color: #333; vertical-align: top; float: left; }
+#user-select-category	.item	{ padding: 3px; }
+#user-select-category	.item:hover	{ background-color: #444; cursor: pointer; }
+#settings-page1				{ height: 200px; padding: 0px; display: none; border: 1px solid #444; background-color: #333; vertical-align: top; margin-left: 145px; overflow: auto; }
+#settings-page2				{ height: 200px; padding: 0px; display: none; border: 1px solid #444; background-color: #333; vertical-align: top; margin-left: 145px; overflow: auto; }
+.item-icon			{ float: left; margin-right: 5px; }

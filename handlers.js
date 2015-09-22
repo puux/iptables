@@ -120,11 +120,20 @@ module.exports = {
 		var args = querystring.parse(query);
 		
 		if(args.c === "save") {
-			module.exports.saveSettings();
+            var body = '';
+            req.on('data', function (data) {
+                body += data;
+            });
+            req.on('end', function () {
+                var post = querystring.parse(body);
+                var data = post['data'];
+                
+                module.exports._settings = JSON.parse(data);
+                module.exports.saveSettings();
+            });
 			res.end();
 		}
 		else {
-			console.log(module.exports._settings);
 			res.end(JSON.stringify(module.exports._settings));
 		}
 	}

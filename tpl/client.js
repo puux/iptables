@@ -40,12 +40,11 @@ var parser = {
 				"</tr>";
 	},
 	
-	LANS: {},   // eth0: "LAN"
 	FIN_RULES: ["drop", "accept", "log", "tcpmss", "return", "dnat", "masquerade"],
 	makeRuleText: function (text) {
 		text = text
 			.replace(/(-[o|i]) ([a-z0-9]+)/g, function(str, dir, int){
-				return dir + ' <b>' + (parser.LANS[int] || int) + '</b>';
+				return dir + ' <b>' + (window._settings.LANS[int] || int) + '</b>';
 			})
 			.replace(/(\-d|\-s|\-\-to\-destination) ([0-9\.\/]+)/g, '$1 <span class="net">$2</span>')
 			.replace(/(--dport) ([0-9\.\/]+)/g, '$1 <span class="port">$2</span>')
@@ -181,6 +180,8 @@ var rules = {
 };
 
 var tools = {
+    pageIndex: 1,
+    
 	save: function() {
 		$.get("/save", function(data) {
 			if(data) {
@@ -188,21 +189,47 @@ var tools = {
 			}
 		});
 	},
+    
+    selectPage: function(index) {
+        $("#settings-page" + tools.pageIndex).hide();
+        tools.pageIndex = index;
+        $("#settings-page" + index).show();
+    },
+    
+    addLan: function() {
+        $("#lans").append(window.tpl.settingsLan("", ""));
+    },
+    
+    removeLan: function(obj) {
+        $(obj).parent().parent().remove();
+    },
 	
 	settingsDlg: function() {
 		$(".settings").dialog({
 			title:"Iptables settingss",
 			modal:true,
 			resizable:false,
-			width: 400,
+			width: 600,
 			buttons: [
 				{
 					text: "Save",
 					click: function() {
+                        $(".param").each(function(index, obj){
+                            window._settings[obj.id] = $(obj).val();
+                        });
+                        window._settings.LANS = {};
+                        $(".lan").each(function(index, obj){
+                            window._settings.LANS[$(obj).children()[0].firstChild.value] = $(obj).children()[1].firstChild.value;
+                        });
+                        $.post("/settings?c=save", {data: JSON.stringify(window._settings)}, function(data) {
+                            if(data) {
+                                showError(data);
+                            }
+                        });
 						$(".settings").dialog("close");
 					}
 				}
 			]
-		})
+		});
 	}
 };

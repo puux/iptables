@@ -9,6 +9,7 @@
 	
 	<script type="text/javascript" src="jquery.min.js"></script> 
 	<script type="text/javascript" src="jquery-ui.min.js"></script> 
+	<script type="text/javascript" src="template.js"></script>
 	<script type="text/javascript" src="tools.js"></script>
 	<script type="text/javascript" src="client.js"></script>
 
@@ -38,11 +39,24 @@
 	</div>
 	
 	<div class="settings">
-		<table>
-			<tr>
-				<td>Save rule path</td><td></td>
-			</tr>
-		</table>
+		<div id="user-select-category">
+            <div class="item" onclick="tools.selectPage(1);"><img class="item-icon" src="http://icons.minecraft-galaxy.ru/img/1/62_49.png"/> Global</div>
+            <div class="item" onclick="tools.selectPage(2)"><img class="item-icon" src="http://icons.minecraft-galaxy.ru/img/7/3749_icon106.ico"/> Networks</div>
+        </div>
+        <div id="settings-page1" style="display: block;">
+            <table width="100%">
+                <tr>
+                    <td>Save rule path</td><td><input class="param" type="text" id="savePath"/></td>
+                </tr>
+            </table>
+        </div>
+        <div id="settings-page2" style="display: none;">
+            <table width="100%" id="lans">
+                <tr><td class="cmd">Network</td><td class="rule">Alias</td></tr>
+            </table>
+            <div class="tools"><a class="button" onclick="tools.addLan();">Add lan</a></div>
+            
+        </div>
 	</div>
 </div>
 
