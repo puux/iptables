@@ -40,7 +40,7 @@ var parser = {
 				"</tr>";
 	},
 	
-	FIN_RULES: ["drop", "accept", "log", "tcpmss", "return", "dnat", "masquerade"],
+	FIN_RULES: {DROP:1, ACCEPT:1, LOG:1, TCPMSS:1, RETURN:1, DNAT:1, MASQUERADE:1},
 	makeRuleText: function (text) {
 		text = text
 			.replace(/(-[o|i]) ([a-z0-9]+)/g, function(str, dir, int){
@@ -53,7 +53,7 @@ var parser = {
 			.replace(/(ACCEPT|DROP)/g, '<span class="ipt-$1">$1</span>')
 			.replace(/-j ([A-Z\_]+)/g, function(str, name) {
 				var lname = name.toLowerCase();
-				if(parser.FIN_RULES[lname]) {
+				if(parser.FIN_RULES[name]) {
 					return "-j " + name;
 				}
 				return '-j <a href="javascript: rules.showList(\'' + lname + '\');">' + name + "</a>";
