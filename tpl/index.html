@@ -1,65 +1,71 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
 
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-	
-	<link rel="stylesheet" href="style.css" type="text/css"/>
-	<link rel="stylesheet" href="jquery-ui.css" type="text/css"/>
-	
-	<script type="text/javascript" src="jquery.min.js"></script> 
-	<script type="text/javascript" src="jquery-ui.min.js"></script> 
-	<script type="text/javascript" src="template.js"></script>
-	<script type="text/javascript" src="tools.js"></script>
-	<script type="text/javascript" src="client.js"></script>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
-	<title>iptables</title>
-</head>
+		<link rel="stylesheet" href="style.css" type="text/css"/>
+		<link rel="stylesheet" href="jquery-ui.css" type="text/css"/>
 
-<body>
+		<script type="text/javascript" src="jquery.min.js"></script> 
+		<script type="text/javascript" src="jquery-ui.min.js"></script> 
+		<script type="text/javascript" src="template.js"></script>
+		<script type="text/javascript" src="tools.js"></script>
+		<script type="text/javascript" src="client.js"></script>
 
-<div class="error"></div>
+		<title>iptables</title>
+	</head>
 
-<div class="content">
-	<ul class="tabs mainmenu">
-		<li><a class="item" href="javascript: rules.showList('input');">INPUT</a></li>
-		<li><a class="item" href="javascript: rules.showList('output');">OUTPUT</a></li>
-		<li><a class="item" href="javascript: rules.showList('forward');">FORWARD</a></li>
-		<li><a class="item" href="javascript: rules.showList('prerouting');">PREROUTING</a></li>
-		<li><a class="item" href="javascript: rules.showList('postrouting');">POSTROUTING</a></li>
-	</ul>
-		
-	<table class="main">
-		
-	</table>
-	
-	<div class="tools">
-		<a class="button" onclick="tools.save();">Save <img class="icon" src="/img/save.png"/></a>
-		<a class="button" onclick="tools.settingsDlg();">Settings <img class="icon" src="/img/settings.png"/></a>
-	</div>
-	
-	<div class="settings">
-		<div id="user-select-category">
-            <div class="item" onclick="tools.selectPage(1);"><img class="item-icon" src="http://icons.minecraft-galaxy.ru/img/1/62_49.png"/> Global</div>
-            <div class="item" onclick="tools.selectPage(2)"><img class="item-icon" src="http://icons.minecraft-galaxy.ru/img/7/3749_icon106.ico"/> Networks</div>
-        </div>
-        <div id="settings-page1" style="display: block;">
-            <table width="100%">
-                <tr>
-                    <td>Save rule path</td><td><input class="param" type="text" id="savePath"/></td>
-                </tr>
-            </table>
-        </div>
-        <div id="settings-page2" style="display: none;">
-            <table width="100%" id="lans">
-                <tr><td class="cmd">Network</td><td class="rule">Alias</td></tr>
-            </table>
-            <div class="tools"><a class="button" onclick="tools.addLan();">Add lan</a></div>
-            
-        </div>
-	</div>
-</div>
+	<body>
 
-</body>
+		<div class="error"></div>
+
+		<div class="content">
+			<ul class="tabs mainmenu">
+				<li><a class="item" href="javascript: rules.showList('input');">INPUT</a></li>
+				<li><a class="item" href="javascript: rules.showList('output');">OUTPUT</a></li>
+				<li><a class="item" href="javascript: rules.showList('forward');">FORWARD</a></li>
+				<li><a class="item" href="javascript: rules.showList('prerouting');">PREROUTING</a></li>
+				<li><a class="item" href="javascript: rules.showList('postrouting');">POSTROUTING</a></li>
+			</ul>
+
+			<table id="main" class="main">
+
+			</table>
+
+			<div class="tools">
+				<a class="button" onclick="tools.save();">Save <img class="icon" src="/img/save.png"/></a>
+				<a class="button" onclick="tools.settingsDlg();">Settings <img class="icon" src="/img/settings.png"/></a>
+			</div>
+
+			<div class="settings">
+				<div id="user-select-category">
+					<div class="item" onclick="tools.selectPage(1);"><img class="item-icon" src="/img/settings.png"/> Global</div>
+					<div class="item" onclick="tools.selectPage(2)"><img class="item-icon" src="/img/lan.png"/> Networks map</div>
+					<div class="item" onclick="tools.selectPage(3)"><img class="item-icon" src="/img/portmap.png"/> Ports map</div>
+				</div>
+				<div id="settings-page1" style="display: block;">
+					<table width="100%">
+						<tr>
+							<td>Save rule path</td><td><input class="param" type="text" id="savePath"/></td>
+						</tr>
+					</table>
+				</div>
+				<div id="settings-page2" style="display: none;">
+					<table width="100%" id="lans" class="main">
+						<tr><td class="cmd">Network</td><td class="rule">Alias</td><td class="mon"></td></tr>
+					</table>
+					<div class="tools"><a class="button" onclick="tools.addLan();">Add lan</a></div>
+				</div>
+				<div id="settings-page3" style="display: none;">
+					<table width="100%" id="ports" class="main">
+						<tr><td class="cmd">Port</td><td class="rule">Alias</td><td class="mon"></td></tr>
+					</table>
+					<div class="tools"><a class="button" onclick="tools.addPort();">Add port</a></div>
+				</div>
+			</div>
+		</div>
+
+	</body>
 
 </html>

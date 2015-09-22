@@ -7,8 +7,7 @@ module.exports = {
 	
 	settingsDir: "/etc/iptables/config.json",
 	_settings: {
-		savePath: "/etc/iptables/rules.save",
-		LANS: {}
+		savePath: "/etc/iptables/rules.save"
 	},
 	
 	loadSettings: function() {

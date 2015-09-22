@@ -69,19 +69,19 @@ html, body {
 }
 
 /* Highlight styles */
-.DROP {
+.ipt-DROP {
 	color: red;
 }
 
-.ACCEPT {
+.ipt-ACCEPT {
 	color: green;
 }
 
-.net {
+.ipt-net {
 	color: gray;
 }
 
-.port {
+.ipt-port {
 	color: blue;
 }
 
@@ -102,6 +102,7 @@ html, body {
 	margin: auto;
 }
 
+/* Main menu */
 .mainmenu {
 	border: 1px solid gray; color: white;  margin: 5px auto 0;
 	-webkit-border-radius: 5px;
@@ -147,6 +148,7 @@ ul.tabs .last {
 		background: -ms-linear-gradient(top,  #555,  #222);
 }
 
+/* Tool buttons */
 .tools	{ padding: 10px; height: 24px; text-align: center; }
 .tools .button			{
 	border: 1px solid gray; color: white; padding: 6px; text-decoration: none; float:right; cursor: pointer; height: 15px; margin-left: 5px;  border-radius: 5px;
@@ -172,6 +174,7 @@ ul.tabs .last {
 .tools .icon			{ float: right; margin: 0 4px; }
 
 
+/* Dialogs */
 .settings {
 	display: none;
 	border: 1px solid gray;
@@ -183,6 +186,5 @@ ul.tabs .last {
 #user-select-category			{ height: 200px; width: 140px; border: 1px solid #444; background-color: #333; vertical-align: top; float: left; }
 #user-select-category	.item	{ padding: 3px; }
 #user-select-category	.item:hover	{ background-color: #444; cursor: pointer; }
-#settings-page1				{ height: 200px; padding: 0px; display: none; border: 1px solid #444; background-color: #333; vertical-align: top; margin-left: 145px; overflow: auto; }
-#settings-page2				{ height: 200px; padding: 0px; display: none; border: 1px solid #444; background-color: #333; vertical-align: top; margin-left: 145px; overflow: auto; }
+#settings-page1, #settings-page2, #settings-page3				{ height: 200px; padding: 0px; display: none; border: 1px solid #444; background-color: #333; vertical-align: top; margin-left: 145px; overflow: auto; }
 .item-icon			{ float: left; margin-right: 5px; }
