@@ -89,8 +89,8 @@ var parser = {
 			.replace(/(-[o|i]) ([a-z0-9]+)/g, function(str, dir, int){
 				return dir + ' <b>' + (window._settings.LANS[int] || int) + '</b>';
 			})
-			.replace(/(\-d|\-s|\-\-to\-destination) ([0-9\.\/]+)/g, '$1 <span class="ipt-net">$2</span>')
-			.replace(/(--dport) ([0-9\.\/]+)/g, function(str, param, port){
+			.replace(/(\-d|\-s|\-\-to\-destination) ([0-9\.\/\:]+)/g, '$1 <span class="ipt-net">$2</span>')
+			.replace(/(--dport|--sport) ([0-9\.\/]+)/g, function(str, param, port){
 				return param + ' <span class="ipt-port">' + (window._settings.PORTS[port] || port) + '</span>';
 			})
 			.replace(/(-m comment --comment) "(.*)" (.*)/g, function(str, param, comment, other){
@@ -183,10 +183,14 @@ var rules = {
 		}
         
         for(var lan in window._settings.LANS) {
-            text = text.replace(new RegExp(" " + window._settings.LANS[lan] + " ", 'g'), " " + lan + " ");
+            text = text.replace(new RegExp("(-[o|i]) " + window._settings.LANS[lan] + " ", 'g'), function(str, dir, int){
+				return dir + " " + lan + " ";
+			});
         }
         for(var port in window._settings.PORTS) {
-            text = text.replace(new RegExp(" " + window._settings.PORTS[port] + " ", 'g'), " " + port + " ");
+            text = text.replace(new RegExp("(--dport|--sport) " + window._settings.PORTS[port] + " ", 'g'), function(str, dir, _port){
+				return dir + " " + port + " ";
+			});
         }
 		
 		text = text.replace(/\/\/(.*)/g, '-m comment --comment "$1"');
@@ -326,6 +330,8 @@ var tools = {
                             }
                         });
 						$(".settings").dialog("close");
+						
+						rules.showList(channel);
 					}
 				}
 			]
