@@ -93,6 +93,9 @@ var parser = {
 			.replace(/(--dport) ([0-9\.\/]+)/g, function(str, param, port){
 				return param + ' <span class="ipt-port">' + (window._settings.PORTS[port] || port) + '</span>';
 			})
+			.replace(/(-m comment --comment) "(.*)" (.*)/g, function(str, param, comment, other){
+				return other + ' <span class="ipt-comment">//' + comment + "</span>";
+			})
 			.replace(/(ACCEPT|DROP)/g, '<span class="ipt-$1">$1</span>')
 			.replace(/-j ([A-Z\_]+)/g, function(str, name) {
 				var lname = name.toLowerCase();
@@ -185,6 +188,8 @@ var rules = {
         for(var port in window._settings.PORTS) {
             text = text.replace(new RegExp(" " + window._settings.PORTS[port] + " ", 'g'), " " + port + " ");
         }
+		
+		text = text.replace(/\/\/(.*)/g, '-m comment --comment "$1"');
         
 		$.post("insert?c=" + channel, {rule: text}, function(data){
 			if(data) {
