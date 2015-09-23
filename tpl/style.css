@@ -57,6 +57,11 @@ html, body {
 	text-align: right;
 }
 
+.main .rowcenter {
+	background-color: #ddd;
+	text-align: center;
+}
+
 .main .row .edit {
 	display: none;
 	cursor: pointer;
@@ -129,7 +134,7 @@ ul.tabs li:hover:first-child	{
 ul.tabs li:hover:last-child	{
 	border-top-right-radius: 5px; border-bottom-right-radius: 5px;
 }
-ul.tabs a	{ position: relative; display: block; }
+ul.tabs a	{ position: relative; display: block; cursor: pointer; }
 ul.tabs .item {
 		color:white; padding: 4px 15px;
 		text-decoration: none; /*margin-right: 5px;*/
@@ -147,6 +152,29 @@ ul.tabs .last {
 		background-image: -o-linear-gradient(top,  #555,  #222);
 		background: -ms-linear-gradient(top,  #555,  #222);
 }
+
+ul.dropdown {
+		margin: 0 0 0 -36px; padding: 5px; display: block; position: absolute; z-index: 999; top: 100%; display: none; left: 0;
+		border: 1px solid gray; background-color: #222; color: white;
+		-webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px;
+}
+ul.dropdown ul.dropdown { top: 0; left: 95%; }
+ul.dropdown li {
+		margin: 0; padding: 1px; float: none; position: relative; list-style: none; display: block; 
+}
+ul.dropdown li:hover { background: none; }
+ul.dropdown li a {
+	display: block; padding: 5px 15px; color: white; text-decoration: none; text-align: center;
+	background-color: black;  width: 200px;
+}
+
+ul.dropdown li a:hover {
+	background-color: #444;
+}
+
+ul.dropdown .first-row	{ float:left; }
+ul.dropdown .second-row	{ float:right; }
+ul.dropdown.large		{ width: 284px; left:-60px; }
 
 /* Tool buttons */
 .tools	{ padding: 10px; height: 24px; text-align: center; }

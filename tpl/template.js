@@ -13,6 +13,12 @@ var tpl = {
                     <td><input type="text" value="' + name + '"/></td>\n\
                     <td><a href="#" onclick="tools.removeLan(this);"><img src="/img/delete.png"/></a></td>\n\
                 </tr>';
-    }
+    },
+	
+	customChain: function (name) {
+		return '<li><a onclick="rules.showList(\'' + name + '\');">' + name + ' <img onclick="rules.removeChain(this);" style="float: right;" src="/img/delete.png"/></a></li>';
+	},
+	
+	customChainAddNew: '<li class="newchain"><a onclick="rules.addChain();">Add new ...</a></li>'
 };
 

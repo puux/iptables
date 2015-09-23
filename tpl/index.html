@@ -22,11 +22,17 @@
 
 		<div class="content">
 			<ul class="tabs mainmenu">
-				<li><a class="item" href="javascript: rules.showList('input');">INPUT</a></li>
-				<li><a class="item" href="javascript: rules.showList('output');">OUTPUT</a></li>
-				<li><a class="item" href="javascript: rules.showList('forward');">FORWARD</a></li>
-				<li><a class="item" href="javascript: rules.showList('prerouting');">PREROUTING</a></li>
-				<li><a class="item" href="javascript: rules.showList('postrouting');">POSTROUTING</a></li>
+				<li><a class="item" onclick="rules.showList('input');">INPUT</a></li>
+				<li><a class="item" onclick="rules.showList('output');">OUTPUT</a></li>
+				<li><a class="item" onclick="rules.showList('forward');">FORWARD</a></li>
+				<li><a class="item" onclick="rules.showList('prerouting');">PREROUTING</a></li>
+				<li><a class="item" onclick="rules.showList('postrouting');">POSTROUTING</a></li>
+				<li>
+					<a class="item" onclick="rules.addChain();">Custom ↓</a>
+					<ul class="dropdown" style="display: none;">
+						
+					</ul>
+				</li>
 			</ul>
 
 			<table id="main" class="main">

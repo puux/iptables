@@ -3,7 +3,50 @@ var channel = "";
 $(document).ready(function(){
 	rules.showList("input");
 	
+	$.get("/chainlist", function(data) {
+		var arr = JSON.parse(data);
+		$(".dropdown").html("");
+		for(var i = 0; i < arr.length; i++) {
+			var item = arr[i];
+			$(".dropdown").append(window.tpl.customChain(item));
+		}
+		$(".dropdown").append(window.tpl.customChainAddNew);
+	});
+	
 	setInterval(rules.monitor, 1000);
+});
+
+$(function () {
+	$('.dropdown').each(function () {
+	  $(this).parent().eq(0).hoverIntent({
+		  timeout: 100,
+		  over: function () {
+			  var current = $('.dropdown:eq(0)', this);
+			  current.slideDown(100);
+		  },
+		  out: function () {
+			  var current = $('.dropdown:eq(0)', this);
+			  current.fadeOut(200);
+		  }
+	  });
+	});
+
+	$('.dropdown').each(function(i, it){
+		var list = $(it).find('li');
+		if(list.length > 12){
+			list.parent().addClass('large');
+			  list.each(function(index, item){
+				  if(index >= list.length / 2){
+					  $(item).addClass('second');
+				  } 
+				  else{
+					  $(item).addClass('first');
+				  }
+			  });
+			  $(it).find('.first').wrapAll('<div class="first-row"/>');
+			  $(it).find('.second').wrapAll('<div class="second-row"/>');
+		}
+	});
 });
 
 var parser = {
@@ -25,14 +68,14 @@ var parser = {
 			index++;
 		}
 
-		$("#main").append('<tr><td colspan="3"></td><td colspan="1"><form onsubmit="return rules.insert();"><input type="text" id="rule" class="ruleeditor"/></form></td><td></td></tr>');
+		$("#main").append('<tr><td colspan="3">Add new rule:</td><td colspan="1"><form onsubmit="return rules.insert();"><input type="text" id="rule" class="ruleeditor"/></form></td><td>Enter</td></tr>');
 	},
 	
 	makeRuleTpl: function (index, text) {
 		var ntext = this.makeRuleText(text);
 
 		return "<tr>" +
-				'<td class="row" id="lindx">' + index + "</td>" +
+				'<td class="rowcenter" id="lindx">' + index + "</td>" +
 				'<td class="rowright" id="pkts' + index + '"></td>' +
 				'<td class="rowright" id="bytes' + index + '"></td>' +
 				'<td class="row" id="rule' + index + '"><span class="edittext">' + ntext + '<img class="edit" src="/img/edit.png" onclick="parser.editRule(' + index + ')"/></spawn></td>' +
@@ -180,8 +223,46 @@ var rules = {
 				}
 			}
 		});
-	}
+	},
+	
+	addChainName: function(name) {
+		channel = name;
+		$.post("insert?c=" + name, {rule: "-N " + name.toUpperCase()}, function(data){
+			if(data) {
+				if(data.substr(0, 1) === "[") {
+					parser.parseChannels(data);
+					//$(".dropdown").append(window.tpl.customChain(name.toUpperCase()));
+					$(window.tpl.customChain(name.toUpperCase())).prependTo(".newchain");
+				}
+				else {
+					showError(data);
+				}
+			}
+		});
+	},
+	
+	addChain: function() {
+		var name = prompt("Enter chain name", "");
+		if(name !== null) {
+			rules.addChainName(name);
+		}
+	},
 
+	removeChain: function(obj) {
+		var rName = $(obj).parent().text();
+		
+		$.post("insert?c=" + rName, {rule: "-X " + rName.toUpperCase()}, function(data){
+			if(data) {
+				if(data.substr(0, 1) === "[") {
+					parser.parseChannels(data);
+					$(obj).parent().parent().remove();
+				}
+				else {
+					showError(data);
+				}
+			}
+		});
+	}
 };
 
 var tools = {

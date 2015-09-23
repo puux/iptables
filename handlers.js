@@ -106,6 +106,22 @@ module.exports = {
 			res.end(JSON.stringify(arr));
 		});
 	},
+	
+	chainList: function(req, res) {
+		proc.exec("iptables -S", function(error, stdout, stderr) {
+			var arr = stdout.split("\n");
+			
+			var new_arr = [];
+			var n = 0;
+			for(var i = 0; i < arr.length; i++) {
+				var item = arr[i];
+				if(item.indexOf("-N") === 0) {
+					new_arr[n++] = item.substring(3);
+				}
+			}
+			res.end(JSON.stringify(new_arr));
+		});
+	},
     
     save: function(req, res) {
         proc.exec("iptables-save > " + module.exports._settings.savePath, function(error, stdout, stderr) {
