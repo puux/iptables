@@ -87,8 +87,12 @@ var parser = {
 	makeRuleText: function (text) {
 		text = text
 			// strings
-			.replace(/"(.*)"/g, function(str, comment){
-				return '<span class="ipt-comment">"' + comment + "\"</span>";
+			.replace(/(--log-prefix) "(.*)"/g, function(str, pref, comment){
+				return pref + ' <span class="ipt-comment">"' + comment + "\"</span>";
+			})
+			// comment
+			.replace(/(-m comment --comment) "(.*)" (.*)/g, function(str, param, comment, other){
+				return other + ' <span class="ipt-comment">//' + comment + "</span>";
 			})
 			// network interfaces
 			.replace(/(-[o|i]) ([a-z0-9]+)/g, function(str, dir, int){
@@ -99,10 +103,6 @@ var parser = {
 			// ports
 			.replace(/(--dport|--sport) ([0-9\.\/]+)/g, function(str, param, port){
 				return param + ' <span class="ipt-port" title="' + port + '">' + (window._settings.PORTS[port] || port) + '</span>';
-			})
-			// comment
-			.replace(/(-m comment --comment) "(.*)" (.*)/g, function(str, param, comment, other){
-				return other + ' <span class="ipt-comment">//' + comment + "</span>";
 			})
 			// rule chain
 			.replace(/-j (ACCEPT|DROP)/g, '-j <span class="ipt-$1">$1</span>')
