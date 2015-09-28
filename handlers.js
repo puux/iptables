@@ -11,7 +11,7 @@ module.exports = {
 	_settings: {
 		savePath: "/etc/iptables/rules.save",
 		user: "admin",
-		pass: "admin"
+		pass: ""
 	},
 	
 	loadSettings: function() {
@@ -154,6 +154,35 @@ module.exports = {
 		}
 		else {
 			res.end(JSON.stringify(module.exports._settings));
+		}
+	},
+	
+	authMe: function(req, res) {
+		var pathname = url.parse(req.url).pathname;
+		
+		if(pathname === "/login") {
+			var body = '';
+			req.on('data', function (data) {
+				body += data;
+			});
+			req.on('end', function () {
+				var post = querystring.parse(body);
+				var login = post['login'];
+				var pass = post['pass'];
+
+				module.exports.auth = login === module.exports._settings.user && pass === module.exports._settings.pass;
+				if(module.exports.auth) {
+					res.writeHead(301, {"Location": "/"});
+					res.end();
+				}
+				else {
+					res.end("Error!");
+				}
+			});
+		}
+		else {
+			res.writeHead(301, {"Location": "auth.html"});
+			res.end();
 		}
 	}
 };

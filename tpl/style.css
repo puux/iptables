@@ -239,3 +239,15 @@ ul.dropdown.large		{ width: 284px; left:-60px; }
 #user-select-category	.item:hover	{ background-color: #444; cursor: pointer; }
 #settings-page1, #settings-page2, #settings-page3				{ height: 200px; padding: 0px; display: none; border: 1px solid #444; background-color: #333; vertical-align: top; margin-left: 145px; overflow: auto; }
 .item-icon			{ float: left; margin-right: 5px; }
+
+.authform {
+	border: 1px solid gray;
+	background-color: #ccc;
+	margin: auto;
+	margin-top: 100px;
+	padding: 15px;
+}
+
+.authform td {
+	text-align: right;
+}

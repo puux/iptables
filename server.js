@@ -13,6 +13,7 @@ handles["/save"] = handle.save;
 handles["/load"] = handle.load;
 handles["/settings"] = handle.settings;
 handles["/chainlist"] = handle.chainList;
+handles["/login"] = handle.authMe;
 
 http.createServer(function handler(req, res) {
     var pathname = url.parse(req.url).pathname;
@@ -20,7 +21,12 @@ http.createServer(function handler(req, res) {
     req.setEncoding("utf8");
     
     if (handles[pathname]) {
-        handles[pathname](req, res);
+        if(handle.auth) {
+			handles[pathname](req, res);
+		}
+		else {
+			handle.authMe(req, res);
+		}
     }
     else {
 		var file = "./tpl" + pathname;
