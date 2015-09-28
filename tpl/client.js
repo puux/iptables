@@ -96,7 +96,7 @@ var parser = {
 			.replace(/(-m comment --comment) "(.*)" (.*)/g, function(str, param, comment, other){
 				return other + ' <span class="ipt-comment">//' + comment + "</span>";
 			})
-			.replace(/(ACCEPT|DROP)/g, '<span class="ipt-$1">$1</span>')
+			.replace(/-j (ACCEPT|DROP)/g, '-j <span class="ipt-$1">$1</span>')
 			.replace(/-j ([A-Z\_]+)/g, function(str, name) {
 				var lname = name.toLowerCase();
 				if(parser.FIN_RULES[name]) {
