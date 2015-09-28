@@ -23,14 +23,45 @@
 
 		<div class="content">
 			<ul class="tabs mainmenu">
-				<li><a class="item" onclick="rules.showList('input');">INPUT</a></li>
-				<li><a class="item" onclick="rules.showList('output');">OUTPUT</a></li>
-				<li><a class="item" onclick="rules.showList('forward');">FORWARD</a></li>
-				<li><a class="item" onclick="rules.showList('prerouting');">PREROUTING</a></li>
-				<li><a class="item" onclick="rules.showList('postrouting');">POSTROUTING</a></li>
+				<li>
+					<a class="item" onclick="rules.showList('input', 'filter');">INPUT</a>
+					<ul class="dropdown" style="display: none;">
+						<li><a class="item" onclick="rules.showList('input', 'filter');">filter</a></li>
+						<li><a class="item" onclick="rules.showList('input', 'mangle');">mangle</a></li>
+					</ul>
+				</li>
+				<li>
+					<a class="item" onclick="rules.showList('output', 'filter');">OUTPUT</a>
+					<ul class="dropdown" style="display: none;">
+						<li><a class="item" onclick="rules.showList('output', 'filter');">filter</a></li>
+						<li><a class="item" onclick="rules.showList('output', 'nat');">nat</a></li>
+						<li><a class="item" onclick="rules.showList('output', 'mangle');">mangle</a></li>
+					</ul>
+				</li>
+				<li>
+					<a class="item" onclick="rules.showList('forward', 'filter');">FORWARD</a>
+					<ul class="dropdown" style="display: none;">
+						<li><a class="item" onclick="rules.showList('forward', 'filter');">filter</a></li>
+						<li><a class="item" onclick="rules.showList('forward', 'mangle');">mangle</a></li>
+					</ul>
+				</li>
+				<li>
+					<a class="item" onclick="rules.showList('prerouting', 'nat');">PREROUTING</a>
+					<ul class="dropdown" style="display: none;">
+						<li><a class="item" onclick="rules.showList('prerouting', 'nat');">filter</a></li>
+						<li><a class="item" onclick="rules.showList('prerouting', 'mangle');">mangle</a></li>
+					</ul>
+				</li>
+				<li>
+					<a class="item" onclick="rules.showList('postrouting', 'nat');">POSTROUTING</a>
+					<ul class="dropdown" style="display: none;">
+						<li><a class="item" onclick="rules.showList('postrouting', 'nat');">filter</a></li>
+						<li><a class="item" onclick="rules.showList('postrouting', 'mangle');">mangle</a></li>
+					</ul>
+				</li>
 				<li>
 					<a class="item" onclick="rules.addChain();">Custom ↓</a>
-					<ul class="dropdown" style="display: none;">
+					<ul class="dropdown" style="display: none;" id="customchains">
 						
 					</ul>
 				</li>

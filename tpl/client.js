@@ -1,16 +1,17 @@
 var channel = "";
+var table = "";
 
 $(document).ready(function(){
-	rules.showList("input");
+	rules.showList("input", "filter");
 	
 	$.get("/chainlist", function(data) {
 		var arr = JSON.parse(data);
-		$(".dropdown").html("");
+		$("#customchains").html("");
 		for(var i = 0; i < arr.length; i++) {
 			var item = arr[i];
-			$(".dropdown").append(window.tpl.customChain(item));
+			$("#customchains").append(window.tpl.customChain(item));
 		}
-		$(".dropdown").append(window.tpl.customChainAddNew);
+		$("#customchains").append(window.tpl.customChainAddNew);
 	});
 	
 	setInterval(rules.monitor, 1000);
@@ -18,17 +19,20 @@ $(document).ready(function(){
 
 $(function () {
 	$('.dropdown').each(function () {
-	  $(this).parent().eq(0).hoverIntent({
-		  timeout: 100,
-		  over: function () {
-			  var current = $('.dropdown:eq(0)', this);
-			  current.slideDown(100);
-		  },
-		  out: function () {
-			  var current = $('.dropdown:eq(0)', this);
-			  current.fadeOut(200);
-		  }
-	  });
+		var id = 0;
+		$(this).parent().eq(0).hoverIntent({
+			timeout: 100,
+			over: function () {
+				var obj = this;
+				id = setTimeout(function() {
+					$('.dropdown:eq(0)', obj).slideDown(100);
+				}, 500);
+			},
+			out: function () {
+				clearTimeout(id);
+				$('.dropdown:eq(0)', this).fadeOut(200);
+			}
+		});
 	});
 
 	$('.dropdown').each(function(i, it){
@@ -101,7 +105,7 @@ var parser = {
 			// networks
 			.replace(/(\-d|\-s|\-\-to\-destination) ([0-9\.\/\:]+)/g, '$1 <span class="ipt-net">$2</span>')
 			// ports
-			.replace(/(--dport|--sport) ([0-9\.\/]+)/g, function(str, param, port){
+			.replace(/(--dport|--sport) ([0-9\.\/\:]+)/g, function(str, param, port){
 				return param + ' <span class="ipt-port" title="' + port + '">' + (window._settings.PORTS[port] || port) + '</span>';
 			})
 			// rule chain
@@ -111,7 +115,7 @@ var parser = {
 				if(parser.FIN_RULES[name]) {
 					return "-j " + name;
 				}
-				return '-j <a href="javascript: rules.showList(\'' + lname + '\');">' + name + "</a>";
+				return '-j <a href="javascript: rules.showList(\'' + lname + '\', \'filter\');">' + name + "</a>";
 			});
 
 		return text;
@@ -158,8 +162,9 @@ var parser = {
 };
 
 var rules = {
-	showList: function (name) {
+	showList: function (name, chainTable) {
 		channel = name;
+		table = chainTable;
 		
 		$(".itemselect").removeClass("itemselect").addClass("item");
 		$(".item").each(function(index, obj) {
@@ -169,11 +174,11 @@ var rules = {
 		});
 
         parser.endEditRule();
-		$.get("channel?c=" + name, parser.parseChannels);
+		$.get("channel?c=" + channel + "&t=" + table, parser.parseChannels);
 	},
 	
 	remove: function (index) {
-		$.get("delete?i=" + index + "&c=" + channel, parser.parseChannels);
+		$.get("delete?i=" + index + "&c=" + channel + "&t=" + table, parser.parseChannels);
 		return false;
 	},
 	
@@ -185,11 +190,10 @@ var rules = {
     
     insertText: function (text) {
 		if(text.search(/-[A|I|R]/g) === -1) {
-			text = "-A " + channel.toLocaleUpperCase() + " " + text ;
+			text = " -A " + channel.toLocaleUpperCase() + " " + text ;
 		}
-		if(channel === "prerouting" || channel === "postrouting") {
-			text = "-t nat " + text;
-		}
+
+		text = "-t " + table + text;
         
         for(var lan in window._settings.LANS) {
             text = text.replace(new RegExp("(-[o|i]) " + window._settings.LANS[lan] + " ", 'g'), function(str, dir, int){
@@ -204,7 +208,7 @@ var rules = {
 		
 		text = text.replace(/\/\/(.*)/g, '-m comment --comment "$1"');
         
-		$.post("insert?c=" + channel, {rule: text}, function(data){
+		$.post("insert?c=" + channel + "&t=" + table, {rule: text}, function(data){
 			if(data) {
 				if(data.substr(0, 1) === "[") {
 					parser.parseChannels(data);
@@ -245,7 +249,7 @@ var rules = {
 	
 	addChainName: function(name) {
 		channel = name;
-		$.post("insert?c=" + name, {rule: "-N " + name.toUpperCase()}, function(data){
+		$.post("insert?c=" + name + "&t=filter", {rule: "-N " + name.toUpperCase()}, function(data){
 			if(data) {
 				if(data.substr(0, 1) === "[") {
 					parser.parseChannels(data);
@@ -269,7 +273,7 @@ var rules = {
 	removeChain: function(obj) {
 		var rName = $(obj).parent().text();
 		
-		$.post("insert?c=" + rName, {rule: "-X " + rName.toUpperCase()}, function(data){
+		$.post("insert?t=filter&c=" + rName, {rule: "-X " + rName.toUpperCase()}, function(data){
 			if(data) {
 				if(data.substr(0, 1) === "[") {
 					parser.parseChannels(data);
@@ -304,7 +308,7 @@ var tools = {
 			}
 			else {
 				showInfo("Load complite!");
-				rules.showList(channel);
+				rules.showList(channel, table);
 			}
 		});
 	},
@@ -355,7 +359,7 @@ var tools = {
                         });
 						$(".settings").dialog("close");
 						
-						rules.showList(channel);
+						rules.showList(channel, table);
 					}
 				}
 			]

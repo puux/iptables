@@ -7,7 +7,8 @@ module.exports = {
 	
 	settingsDir: "/etc/iptables/config.json",
 	_settings: {
-		savePath: "/etc/iptables/rules.save"
+		savePath: "/etc/iptables/rules.save",
+		
 	},
 	
 	loadSettings: function() {
@@ -41,13 +42,8 @@ module.exports = {
 	showChannel: function(req, res) {
 		var query = url.parse(req.url).query;
 		var args = querystring.parse(query);
-		
-		var table = "";
-		if(args.c === "prerouting" || args.c === "postrouting") {
-			table = " -t nat ";
-		}
-		
-		var run = "iptables " + table + " -S " + args.c.toUpperCase();
+
+		var run = "iptables -t " + args.t + " -S " + args.c.toUpperCase();
 		proc.exec(run, function(error, stdout, stderr) {
 			var arr = stdout.split("\n");
 			
@@ -59,12 +55,7 @@ module.exports = {
 		var query = url.parse(req.url).query;
 		var args = querystring.parse(query);
 		
-		var table = "";
-		if(args.c === "prerouting" || args.c === "postrouting") {
-			table = " -t nat ";
-		}
-		
-		proc.exec("iptables " + table + " -D " + args.c.toUpperCase() + " " + args.i, function(error, stdout, stderr) {
+		proc.exec("iptables -t " + args.t + " -D " + args.c.toUpperCase() + " " + args.i, function(error, stdout, stderr) {
 			module.exports.showChannel(req, res);
 		});
 	},
@@ -93,13 +84,8 @@ module.exports = {
 	monitor: function(req, res) {
 		var query = url.parse(req.url).query;
 		var args = querystring.parse(query);
-		
-		var table = "";
-		if(args.c === "prerouting" || args.c === "postrouting") {
-			table = " -t nat ";
-		}
-		
-		var run = "iptables " + table + " -L " + args.c.toUpperCase() + " -vn";
+
+		var run = "iptables -t " + args.t + " -L " + args.c.toUpperCase() + " -vn";
 		proc.exec(run, function(error, stdout, stderr) {
 			var arr = stdout.split("\n");
 			
