@@ -5,17 +5,28 @@ var querystring = require("querystring");
 
 module.exports = {
 	
+	auth: false,
+	
 	settingsDir: "/etc/iptables/config.json",
 	_settings: {
 		savePath: "/etc/iptables/rules.save",
-		
+		user: "admin",
+		pass: "admin"
 	},
 	
 	loadSettings: function() {
 		fs.exists(this.settingsDir, function(ex){
 			if(ex) {
 				fs.readFile(module.exports.settingsDir, [], function(err, data) {
+					// Restore new settings after load from file
+					var s = module.exports._settings;
 					module.exports._settings = JSON.parse(data);
+					for(var key in s) {
+						if(!module.exports._settings[key]) {
+							module.exports._settings[key] = s[key];
+						}
+					}
+					module.exports.auth = module.exports._settings.pass === "";
 					console.log("Load settings from " + module.exports.settingsDir);
 				});
 			}

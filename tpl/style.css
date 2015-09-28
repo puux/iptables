@@ -125,6 +125,11 @@ html, body {
 	margin: auto;
 }
 
+.splitter {
+	background-color: #888;
+	padding: 3px;
+}
+
 /* Main menu */
 .mainmenu {
 	border: 1px solid gray; color: white;  margin: 5px auto 0;
