@@ -31,3 +31,9 @@ function showError(text) {
 		$(this).fadeOut();
 	});
 }
+
+function showInfo(text) {
+	$(".info").html(text).fadeIn().click(function(){
+		$(this).fadeOut();
+	});
+}

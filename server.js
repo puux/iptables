@@ -10,6 +10,7 @@ handles["/delete"] = handle.deleteRule;
 handles["/insert"] = handle.insertRule;
 handles["/mon"] = handle.monitor;
 handles["/save"] = handle.save;
+handles["/load"] = handle.load;
 handles["/settings"] = handle.settings;
 handles["/chainlist"] = handle.chainList;
 

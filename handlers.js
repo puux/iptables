@@ -129,6 +129,13 @@ module.exports = {
 			res.end(stderr);
 		});
     },
+    
+    load: function(req, res) {
+        proc.exec("iptables-restore < " + module.exports._settings.savePath, function(error, stdout, stderr) {
+
+			res.end(stderr);
+		});
+    },
 	
 	settings: function(req, res) {
 		var query = url.parse(req.url).query;

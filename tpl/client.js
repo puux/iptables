@@ -291,6 +291,21 @@ var tools = {
 			if(data) {
 				showError(data);
 			}
+			else {
+				showInfo("Save complite!");
+			}
+		});
+	},
+    
+	load: function() {
+		$.get("/load", function(data) {
+			if(data) {
+				showError(data);
+			}
+			else {
+				showInfo("Load complite!");
+				rules.showList(channel);
+			}
 		});
 	},
     

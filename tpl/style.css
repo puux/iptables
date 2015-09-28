@@ -108,6 +108,18 @@ html, body {
 	position: static;
 }
 
+.info {
+	width: 100%;
+	color: black;
+	padding: 15px;
+	text-align: center;
+	display: none;
+	border: 1px solid green;
+	background-color: lightgreen;
+	cursor: pointer;
+	position: static;
+}
+
 .content {
 	width: 1000px;
 	margin: auto;
