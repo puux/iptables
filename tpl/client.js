@@ -79,23 +79,32 @@ var parser = {
 				'<td class="rowright" id="pkts' + index + '"></td>' +
 				'<td class="rowright" id="bytes' + index + '"></td>' +
 				'<td class="row" id="rule' + index + '"><span class="edittext">' + ntext + '<img class="edit" src="/img/edit.png" onclick="parser.editRule(' + index + ')"/></spawn></td>' +
-				'<td class="row"><a href="#" onclick="return rules.remove(' + index + ');" title="Delete"><img src="/img/delete.png"/></a>' + "</td>" +
+				(index ? '<td class="row"><a href="#" onclick="return rules.remove(' + index + ');" title="Delete"><img src="/img/delete.png"/></a>' + "</td>" : '<td class="row"></td>') +
 				"</tr>";
 	},
 	
 	FIN_RULES: {DROP:1, ACCEPT:1, LOG:1, TCPMSS:1, RETURN:1, DNAT:1, MASQUERADE:1},
 	makeRuleText: function (text) {
 		text = text
+			// strings
+			.replace(/"(.*)"/g, function(str, comment){
+				return '<span class="ipt-comment">"' + comment + "\"</span>";
+			})
+			// network interfaces
 			.replace(/(-[o|i]) ([a-z0-9]+)/g, function(str, dir, int){
-				return dir + ' <b>' + (window._settings.LANS[int] || int) + '</b>';
+				return dir + ' <b title="' + int + '">' + (window._settings.LANS[int] || int) + '</b>';
 			})
+			// networks
 			.replace(/(\-d|\-s|\-\-to\-destination) ([0-9\.\/\:]+)/g, '$1 <span class="ipt-net">$2</span>')
+			// ports
 			.replace(/(--dport|--sport) ([0-9\.\/]+)/g, function(str, param, port){
-				return param + ' <span class="ipt-port">' + (window._settings.PORTS[port] || port) + '</span>';
+				return param + ' <span class="ipt-port" title="' + port + '">' + (window._settings.PORTS[port] || port) + '</span>';
 			})
+			// comment
 			.replace(/(-m comment --comment) "(.*)" (.*)/g, function(str, param, comment, other){
 				return other + ' <span class="ipt-comment">//' + comment + "</span>";
 			})
+			// rule chain
 			.replace(/-j (ACCEPT|DROP)/g, '-j <span class="ipt-$1">$1</span>')
 			.replace(/-j ([A-Z\_]+)/g, function(str, name) {
 				var lname = name.toLowerCase();

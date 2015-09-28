@@ -50,6 +50,7 @@ html, body {
 .main .row {
 	background-color: #ddd;
     height: 21px;
+	padding: 0 5px;
 }
 
 .main .rowright {
