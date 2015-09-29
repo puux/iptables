@@ -23,6 +23,10 @@ $(document).ready(function(){
 		else {
 			_settings.PORTS = {};
 		}
+		
+		if(_settings.pass) {
+			$("#logout").show();
+		}
 	});
 });
 

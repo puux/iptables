@@ -14,6 +14,7 @@ handles["/load"] = handle.load;
 handles["/settings"] = handle.settings;
 handles["/chainlist"] = handle.chainList;
 handles["/login"] = handle.authMe;
+handles["/logout"] = handle.logout;
 
 http.createServer(function handler(req, res) {
     var pathname = url.parse(req.url).pathname;

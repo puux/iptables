@@ -223,7 +223,7 @@ var rules = {
 	},
 	
 	monitor: function() {
-		$.get("/mon?c=" + channel, function(data){
+		$.get("/mon?c=" + channel + "&t=" + table, function(data){
 			var arr = JSON.parse(data);
 			var index = 0;
 			for(var i = 0; i < arr.length; i++) {

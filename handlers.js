@@ -184,6 +184,12 @@ module.exports = {
 			res.writeHead(301, {"Location": "auth.html"});
 			res.end();
 		}
+	},
+	
+	logout: function(req, res) {
+		module.exports.auth = false;
+		res.writeHead(301, {"Location": "auth.html"});
+		res.end();
 	}
 };
 
