@@ -284,6 +284,19 @@ var rules = {
 				}
 			}
 		});
+	},
+	
+	resetCounters: function() {
+		$.post("insert?t=" + table + "&c=" + channel, {rule: "-t " + table + " -Z " + channel.toUpperCase()}, function(data){
+			if(data) {
+				if(data.substr(0, 1) === "[") {
+					parser.parseChannels(data);
+				}
+				else {
+					showError(data);
+				}
+			}
+		});
 	}
 };
 

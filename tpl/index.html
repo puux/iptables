@@ -73,9 +73,10 @@
 
 			<div class="tools">
 				<a class="button" href="/logout" id="logout" style="display: none;">Logout <img class="icon" src="/img/logout.png"/></a>
-				<a class="button" onclick="tools.load();">Load <img class="icon" src="/img/load.png"/></a>
-				<a class="button" onclick="tools.save();">Save <img class="icon" src="/img/save.png"/></a>
-				<a class="button" onclick="tools.settingsDlg();">Settings <img class="icon" src="/img/settings.png"/></a>
+				<a class="button" onclick="tools.load();" title="Load rules from file">Load <img class="icon" src="/img/load.png"/></a>
+				<a class="button" onclick="tools.save();" title="Save rules into file">Save <img class="icon" src="/img/save.png"/></a>
+				<a class="button" onclick="tools.settingsDlg();" title="Show settings dialog">Settings <img class="icon" src="/img/settings.png"/></a>
+				<a class="button" onclick="rules.resetCounters();" title="Reset counters for current chain">Reset <img class="icon" src="/img/reset.png"/></a>
 			</div>
 
 			<div class="settings">
