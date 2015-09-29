@@ -313,10 +313,16 @@ var tools = {
 		});
 	},
     
+	oldIndex: -1,
     selectPage: function(index) {
         $("#settings-page" + tools.pageIndex).hide();
         tools.pageIndex = index;
         $("#settings-page" + index).show();
+		if(tools.oldIndex !== -1) {
+			$("#page" + tools.oldIndex).removeClass("itemselected").addClass("item");
+		}
+		$("#page" + index).removeClass("item").addClass("itemselected");
+		tools.oldIndex = index;
     },
     
     addLan: function() {

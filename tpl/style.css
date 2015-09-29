@@ -236,6 +236,7 @@ ul.dropdown.large		{ width: 284px; left:-60px; }
 
 #user-select-category			{ height: 200px; width: 140px; border: 1px solid #444; background-color: #333; vertical-align: top; float: left; }
 #user-select-category	.item	{ padding: 3px; }
+#user-select-category	.itemselected	{ padding: 3px; background-color: #111; }
 #user-select-category	.item:hover	{ background-color: #444; cursor: pointer; }
 #settings-page1, #settings-page2, #settings-page3				{ height: 200px; padding: 0px; display: none; border: 1px solid #444; background-color: #333; vertical-align: top; margin-left: 145px; overflow: auto; }
 .item-icon			{ float: left; margin-right: 5px; }
