@@ -100,6 +100,7 @@ module.exports = {
 		proc.exec(run, function(error, stdout, stderr) {
 			var arr = stdout.split("\n");
 			
+			res.writeHead(200, {"Cache-Control": "no-cache"});
 			res.end(JSON.stringify(arr));
 		});
 	},
