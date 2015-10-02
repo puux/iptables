@@ -190,10 +190,10 @@ var rules = {
     
     insertText: function (text) {
 		if(text.search(/-[A|I|R]/g) === -1) {
-			text = " -A " + channel.toLocaleUpperCase() + " " + text ;
+			text = "-A " + channel.toLocaleUpperCase() + " " + text ;
 		}
 
-		text = "-t " + table + text;
+		text = "-t " + table + " " + text;
         
         for(var lan in window._settings.LANS) {
             text = text.replace(new RegExp("(-[o|i]) " + window._settings.LANS[lan] + " ", 'g'), function(str, dir, int){
