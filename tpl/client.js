@@ -9,7 +9,10 @@ $(document).ready(function(){
 		$("#customchains").html("");
 		for(var i = 0; i < arr.length; i++) {
 			var item = arr[i];
-			$("#customchains").append(window.tpl.customChain(item));
+			var index = item.indexOf(" ");
+			var rName = item.substr(0, index);
+			var rTable = item.substr(index+2, item.length - index - 3);
+			$("#customchains").append(window.tpl.customChain(rName, rTable));
 		}
 		$("#customchains").append(window.tpl.customChainAddNew);
 	});
@@ -87,7 +90,7 @@ var parser = {
 				"</tr>";
 	},
 	
-	FIN_RULES: {DROP:1, ACCEPT:1, LOG:1, TCPMSS:1, RETURN:1, DNAT:1, MASQUERADE:1},
+	FIN_RULES: {DROP:1, ACCEPT:1, LOG:1, TCPMSS:1, RETURN:1, DNAT:1, MASQUERADE:1, CONNMARK:1},
 	makeRuleText: function (text) {
 		text = text
 			// strings
@@ -115,7 +118,7 @@ var parser = {
 				if(parser.FIN_RULES[name]) {
 					return "-j " + name;
 				}
-				return '-j <a href="javascript: rules.showList(\'' + lname + '\', \'filter\');">' + name + "</a>";
+				return '-j <a href="javascript: rules.showList(\'' + lname + '\', \'' + table + '\');">' + name + "</a>";
 			});
 
 		return text;
@@ -247,14 +250,15 @@ var rules = {
 		});
 	},
 	
-	addChainName: function(name) {
+	addChainName: function(name, _table) {
 		channel = name;
-		$.post("insert?c=" + name + "&t=filter", {rule: "-N " + name.toUpperCase()}, function(data){
+		table = _table;
+		$.post("insert?c=" + name + "&t=" + table, {rule: "-t " + table + " -N " + name.toUpperCase()}, function(data){
 			if(data) {
 				if(data.substr(0, 1) === "[") {
 					parser.parseChannels(data);
 					//$(".dropdown").append(window.tpl.customChain(name.toUpperCase()));
-					$(window.tpl.customChain(name.toUpperCase())).prependTo(".newchain");
+					$(window.tpl.customChain(name.toUpperCase(), _table)).prependTo(".newchain");
 				}
 				else {
 					showError(data);
@@ -264,16 +268,28 @@ var rules = {
 	},
 	
 	addChain: function() {
-		var name = prompt("Enter chain name", "");
-		if(name !== null) {
-			rules.addChainName(name);
-		}
+		$(".addchain").dialog({
+			title:"Create new chain",
+			modal:true,
+			resizable:false,
+			width: 400,
+			buttons: [
+				{
+					text: "Create",
+					click: function() {
+                        rules.addChainName($("#chainname").val(), $("#chaintable").val());
+						$(".addchain").dialog("close");
+					}
+				}
+			]
+		});
 	},
 
 	removeChain: function(obj) {
-		var rName = $(obj).parent().text();
+		var rName = $(obj).attr("chainname");
+		var rTable = $(obj).attr("chaintable");
 		
-		$.post("insert?t=filter&c=" + rName, {rule: "-X " + rName.toUpperCase()}, function(data){
+		$.post("insert?t=" + rTable + "&c=" + rName, {rule: "-t " + rTable + " -X " + rName.toUpperCase()}, function(data){
 			if(data) {
 				if(data.substr(0, 1) === "[") {
 					parser.parseChannels(data);

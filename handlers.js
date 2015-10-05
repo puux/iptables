@@ -106,18 +106,43 @@ module.exports = {
 	},
 	
 	chainList: function(req, res) {
+		var new_arr = [];
+		var n = 0;
+		
 		proc.exec("iptables -S", function(error, stdout, stderr) {
 			var arr = stdout.split("\n");
 			
-			var new_arr = [];
 			var n = 0;
 			for(var i = 0; i < arr.length; i++) {
 				var item = arr[i];
 				if(item.indexOf("-N") === 0) {
-					new_arr[n++] = item.substring(3);
+					new_arr[n++] = item.substring(3) + " (filter)";
 				}
 			}
-			res.end(JSON.stringify(new_arr));
+			
+			proc.exec("iptables -t nat -S", function(error, stdout, stderr) {
+				var arr = stdout.split("\n");
+
+				for(var i = 0; i < arr.length; i++) {
+					var item = arr[i];
+					if(item.indexOf("-N") === 0) {
+						new_arr[n++] = item.substring(3) + " (nat)";
+					}
+				}
+
+				proc.exec("iptables -t mangle -S", function(error, stdout, stderr) {
+					var arr = stdout.split("\n");
+
+					for(var i = 0; i < arr.length; i++) {
+						var item = arr[i];
+						if(item.indexOf("-N") === 0) {
+							new_arr[n++] = item.substring(3) + " (mangle)";
+						}
+					}
+					
+					res.end(JSON.stringify(new_arr));
+				});
+			});
 		});
 	},
     

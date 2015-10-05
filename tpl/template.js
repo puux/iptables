@@ -15,8 +15,8 @@ var tpl = {
                 </tr>';
     },
 	
-	customChain: function (name) {
-		return '<li><a onclick="rules.showList(\'' + name + '\', \'filter\');">' + name + ' <img onclick="rules.removeChain(this);" style="float: right;" src="/img/delete.png"/></a></li>';
+	customChain: function (name, table) {
+		return '<li><a onclick="rules.showList(\'' + name + '\', \'' + table + '\');">' + name + " (" + table + ') <img chainname="' + name + '" chaintable="' + table + '"onclick="rules.removeChain(this);" style="float: right;" src="/img/delete.png"/></a></li>';
 	},
 	
 	customChainAddNew: '<li class="newchain"><a onclick="rules.addChain();">Add new ...</a></li>'
