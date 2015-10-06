@@ -15,6 +15,7 @@ handles["/settings"] = handle.settings;
 handles["/chainlist"] = handle.chainList;
 handles["/login"] = handle.authMe;
 handles["/logout"] = handle.logout;
+handles["/users"] = handle.userList;
 
 http.createServer(function handler(req, res) {
     var pathname = url.parse(req.url).pathname;
@@ -22,7 +23,7 @@ http.createServer(function handler(req, res) {
     req.setEncoding("utf8");
     
     if (handles[pathname]) {
-        if(handle.auth) {
+        if(handle.isAuth(req)) {
 			handles[pathname](req, res);
 		}
 		else {

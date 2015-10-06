@@ -90,7 +90,7 @@ var parser = {
 				"</tr>";
 	},
 	
-	FIN_RULES: {DROP:1, ACCEPT:1, LOG:1, TCPMSS:1, RETURN:1, DNAT:1, MASQUERADE:1, CONNMARK:1},
+	FIN_RULES: {DROP:1, ACCEPT:1, LOG:1, TCPMSS:1, RETURN:1, DNAT:1, MASQUERADE:1, CONNMARK:1, TOS:1},
 	makeRuleText: function (text) {
 		text = text
 			// strings

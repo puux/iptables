@@ -6,6 +6,7 @@ var querystring = require("querystring");
 module.exports = {
 	
 	auth: false,
+	authUsers: {},
 	
 	settingsDir: "/etc/iptables/config.json",
 	_settings: {
@@ -196,8 +197,10 @@ module.exports = {
 				var login = post['login'];
 				var pass = post['pass'];
 
-				module.exports.auth = login === module.exports._settings.user && pass === module.exports._settings.pass;
-				if(module.exports.auth) {
+				var auth = login === module.exports._settings.user && pass === module.exports._settings.pass;
+				if(auth) {
+					var ip = req.connection.remoteAddress;
+					module.exports.authUsers[ip] = 1;
 					res.writeHead(301, {"Location": "/"});
 					res.end();
 				}
@@ -207,14 +210,27 @@ module.exports = {
 			});
 		}
 		else {
-			res.writeHead(301, {"Location": "auth.html"});
+			res.writeHead(301, {"Location": "auth.html", "Cache-Control": "no-cache"});
 			res.end();
 		}
 	},
 	
+	isAuth: function(req) {
+		var ip = req.connection.remoteAddress;
+		return module.exports.auth || module.exports.authUsers[ip];
+	},
+	
 	logout: function(req, res) {
-		module.exports.auth = false;
-		res.writeHead(301, {"Location": "auth.html"});
+		var ip = req.connection.remoteAddress;
+		module.exports.authUsers[ip] = 0;
+		res.writeHead(301, {"Location": "auth.html", "Cache-Control": "no-cache"});
+		res.end();
+	},
+	
+	userList: function(req, res) {
+		for(var ip in module.exports.authUsers) {
+			res.write("IP: " + ip + " " + (module.exports.authUsers[ip] ? "auth" : "none"));
+		}
 		res.end();
 	}
 };
