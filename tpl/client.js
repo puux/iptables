@@ -427,10 +427,18 @@ var tools = {
 						var _src = $("#new_src").val();
 						rule += _src === "" ? "" : " -s " + _src;
 						
-						var _from = $("#new_port_from").val();
-						var _to = $("#new_port_to").val();
+						var _from = $("#new_dst_port_from").val();
+						var _to = $("#new_dst_port_to").val();
 						if(_from !== "" || _to !== "") {
 							rule += _from === "" ? "" : " --dport " + _from;
+							if(_to !== "") {
+								rule += ":" + _to;
+							}
+						}
+						_from = $("#new_src_port_from").val();
+						_to = $("#new_src_port_to").val();
+						if(_from !== "" || _to !== "") {
+							rule += _from === "" ? "" : " --sport " + _from;
 							if(_to !== "") {
 								rule += ":" + _to;
 							}
@@ -467,11 +475,13 @@ var tools = {
 						$("#new_out").val("");
 						$("#new_dest").val("");
 						$("#new_src").val("");
-						$("#new_port_from").val("");
-						$("#new_port_to").val("");
+						$("#new_dst_port_from").val("");
+						$("#new_dst_port_to").val("");
+						$("#new_src_port_from").val("");
+						$("#new_src_port_to").val("");
 						$("#new_state").val("none");
 						$("#new_limit").val("");
-						$("#new_action").val("ACCEPT");
+						$("#new_action").val("ACCEPT").change();
 						$("#new_to_destination").val("");
 						$("#new_log_prefix").val("");
 						$("#new_log_level").val("");

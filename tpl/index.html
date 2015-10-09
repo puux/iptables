@@ -128,9 +128,8 @@
 						<tr><td class="cmd">Proto:</td><td><select id="new_proto" title="Network protocol"><option value="none">none</option><option value="tcp">TCP</option><option value="udp">UDP</option><option value="ICMP">icmp</option><option value="gre">GRE</option></select></td></tr>
 						<tr><td class="cmd">Input:</td><td><input type="text" id="new_in" title="Input interface"/></td></tr>
 						<tr><td class="cmd">Output:</td><td><input type="text" id="new_out" title="Output interface"/></td></tr>
-						<tr><td class="cmd">Dest:</td><td><input type="text" id="new_dest" title="Destination address"/></td></tr>
-						<tr><td class="cmd">Source:</td><td><input type="text" id="new_src" title="Source address"/></td></tr>
-						<tr><td class="cmd">Port:</td><td>from: <input type="text" id="new_port_from" title="Source port"/> to: <input type="text" id="new_port_to" title="Source port"/></td></tr>
+						<tr><td class="cmd">Dest:</td><td><input type="text" id="new_dest" title="Destination address"/> from: <input type="text" id="new_dst_port_from" title="Destination port" style="width: 40px;"/> to: <input type="text" id="new_dst_port_to" title="Destination port" style="width: 40px;"/></td></tr>
+						<tr><td class="cmd">Source:</td><td><input type="text" id="new_src" title="Source address"/> from: <input type="text" id="new_src_port_from" title="Source port" style="width: 40px;"/> to: <input type="text" id="new_src_port_to" title="Source port" style="width: 40px;"/></td></tr>
 						<tr><td class="cmd">State:</td><td><select id="new_state" title="Connection state"><option value="none">none</option><option value="NEW">NEW</option><option value="ESTABLISHED">ESTABLISHED</option><option value="RELATED">RELATED</option><option value="INVALID">INVALID</option></select></td></tr>
 						<tr><td class="cmd">Limit:</td><td><input type="text" id="new_limit" title="Package limit"/></td></tr>
 						<tr><td class="cmd">Action:</td><td><select id="new_action" onchange="tools.setAction();" title="Rule action"><option value="DROP">DROP</option><option value="ACCEPT">ACCEPT</option><option value="DNAT">DNAT</option><option value="LOG">LOG</option></select> <span id="action_sub"></span></td></tr>
