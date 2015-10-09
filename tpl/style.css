@@ -1,4 +1,4 @@
-input {
+.main input {
 	width: 100%;
 	margin: 0;
     border: 1px solid gray;
@@ -235,6 +235,14 @@ ul.dropdown.large		{ width: 284px; left:-60px; }
 }
 
 .addchain {
+	display: none;
+	border: 1px solid gray;
+	background-color: silver;
+	width: 300px;
+	height: 200px;
+}
+
+.dialog {
 	display: none;
 	border: 1px solid gray;
 	background-color: silver;

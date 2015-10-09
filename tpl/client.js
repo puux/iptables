@@ -75,7 +75,7 @@ var parser = {
 			index++;
 		}
 
-		$("#main").append('<tr><td colspan="3">Add new rule:</td><td colspan="1"><form onsubmit="return rules.insert();"><input type="text" id="rule" class="ruleeditor"/></form></td><td>Enter</td></tr>');
+		$("#main").append('<tr><td colspan="3">Add new rule:</td><td colspan="1"><form onsubmit="return rules.insert();"><input type="text" id="rule" class="ruleeditor"/></form></td><td><a href="#" onclick="return tools.addDialogRule();" title="Add rule"><img src="/img/make.png"/></a></td></tr>');
 	},
 	
 	makeRuleTpl: function (index, text) {
@@ -90,7 +90,7 @@ var parser = {
 				"</tr>";
 	},
 	
-	FIN_RULES: {DROP:1, ACCEPT:1, LOG:1, TCPMSS:1, RETURN:1, DNAT:1, MASQUERADE:1, CONNMARK:1, TOS:1},
+	FIN_RULES: {DROP:1, ACCEPT:1, LOG:1, TCPMSS:1, RETURN:1, DNAT:1, SNAT:1, MASQUERADE:1, CONNMARK:1, TOS:1, TTL:1},
 	makeRuleText: function (text) {
 		text = text
 			// strings
@@ -399,5 +399,89 @@ var tools = {
 				}
 			]
 		});
+	},
+	
+	addDialogRule: function() {
+		$("#makeRule").dialog({
+			title:"Make rule",
+			modal:true,
+			resizable:false,
+			width: 600,
+			buttons: [
+				{
+					text: "Add",
+					click: function() {
+						var rule = "";
+						var proto = $("#new_proto").val();
+						rule += proto === "none" ? "" : " -p " + proto;
+						
+						var _in = $("#new_in").val();
+						rule += _in === "" ? "" : " -i " + _in;
+						
+						var _out = $("#new_out").val();
+						rule += _out === "" ? "" : " -o " + _out;
+						
+						var _dest = $("#new_dest").val();
+						rule += _dest === "" ? "" : " -d " + _dest;
+						
+						var _src = $("#new_src").val();
+						rule += _src === "" ? "" : " -s " + _src;
+						
+						var _from = $("#new_port_from").val();
+						var _to = $("#new_port_to").val();
+						if(_from !== "" || _to !== "") {
+							rule += _from === "" ? "" : " --dport " + _from;
+							if(_to !== "") {
+								rule += ":" + _to;
+							}
+						}
+						
+						var _state = $("#new_state").val();
+						rule += _state === "none" ? "" : " -m state --state " + _state;
+						
+						var _limit = $("#new_limit").val();
+						rule += _limit === "" ? "" : " -m limit --limit " + _limit;
+						
+						var _action = $("#new_action").val();
+						rule += " -j " + _action;
+						if(_action === "DNAT") {
+							rule += " --to-destination " + $("#new_to_destination").val();
+						}
+						else if(_action === "LOG") {
+							var _prefix = $("#new_log_prefix").val();
+							rule += _prefix === "" ? "" : " --log-prefix \"" + _prefix + "\"";
+							var _level = $("#new_log_level").val();
+							rule += _level === "" ? "" : " --log-level " + _level;
+						}
+						
+						$("#rule").val(rule);
+						
+						$("#makeRule").dialog("close");
+					}
+				},
+				{
+					text: "Reset",
+					click: function() {
+						$("#new_proto").val("none");
+						$("#new_in").val("");
+						$("#new_out").val("");
+						$("#new_dest").val("");
+						$("#new_src").val("");
+						$("#new_port_from").val("");
+						$("#new_port_to").val("");
+						$("#new_state").val("none");
+						$("#new_limit").val("");
+						$("#new_action").val("ACCEPT");
+						$("#new_to_destination").val("");
+						$("#new_log_prefix").val("");
+						$("#new_log_level").val("");
+					}
+				}
+			]
+		});
+	},
+	
+	setAction: function() {
+		$("#action_sub").html(window.tpl.actionSub($("#new_action").val()));
 	}
 };
