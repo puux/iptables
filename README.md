@@ -5,7 +5,7 @@ Howto install
 
 1. Download and install Node.js
 2. Install websocket: npm install nodejs-websocket
-3. Export node_modules path: export NODE_PATH=<nodejs path>/bin/node_modules
+3. Export node_modules path: export NODE_PATH={nodejs path}/bin/node_modules
 
 Howto use
 
