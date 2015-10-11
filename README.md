@@ -1,15 +1,19 @@
 # iptables
 iptables WEB gui
 
-Howto use
+Howto install
 
 1. Download and install Node.js
+2. Install websocket: npm install nodejs-websocket
+3. Export node_modules path: export NODE_PATH=<nodejs path>/bin/node_modules
 
-2. Clone repository:
+Howto use
+
+1. Clone repository:
 git clone https://github.com/puux/iptables.git
 
-3. Run server:
+2. Run server:
 cd iptables
 node server.js
 
-4. Open browser and goto http://127.0.0.1:1337/
+3. Open browser and goto http://127.0.0.1:1337/
