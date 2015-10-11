@@ -73,6 +73,7 @@
 
 			<div class="tools">
 				<a class="button" href="/logout" id="logout" style="display: none;">Logout <img class="icon" src="/img/logout.png"/></a>
+				<a class="button" onclick="tools.showLogs();" title="Show system logs">SysLogs <img class="icon" src="/img/logs.png"/></a>
 				<a class="button" onclick="tools.load();" title="Load rules from file">Load <img class="icon" src="/img/load.png"/></a>
 				<a class="button" onclick="tools.save();" title="Save rules into file">Save <img class="icon" src="/img/save.png"/></a>
 				<a class="button" onclick="tools.settingsDlg();" title="Show settings dialog">Settings <img class="icon" src="/img/settings.png"/></a>
@@ -135,6 +136,11 @@
 						<tr><td class="cmd">Action:</td><td><select id="new_action" onchange="tools.setAction();" title="Rule action"><option value="DROP">DROP</option><option value="ACCEPT">ACCEPT</option><option value="DNAT">DNAT</option><option value="LOG">LOG</option></select> <span id="action_sub"></span></td></tr>
 					</table>
 				</form>
+			</div>
+			<div class="dialog" id="syslog">
+				<div id="logs">
+					
+				</div>
 			</div>
 		</div>
 

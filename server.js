@@ -50,3 +50,20 @@ http.createServer(function handler(req, res) {
     }
 }).listen(1337);
 console.log('Server running at http://*:1337/');
+
+
+// ------------------ WebSocket ------------------------------------------------
+var proc = require('child_process');
+var ws = require("nodejs-websocket");
+
+var server = ws.createServer(function (conn) {
+
+	var log = proc.spawn("tail", ["-f", "/var/log/syslog"]);
+	log.stdout.on('data', function (data) {
+		conn.sendText(JSON.stringify(data.toString().split("\n")));
+	});
+
+	conn.on("close", function (code, reason) {
+		log.kill('SIGHUP');
+	});
+}).listen(8001);

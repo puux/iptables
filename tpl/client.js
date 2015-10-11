@@ -368,7 +368,7 @@ var tools = {
     
 	settingsDlg: function() {
 		$(".settings").dialog({
-			title:"Iptables settingss",
+			title:"Iptables settings",
 			modal:true,
 			resizable:false,
 			width: 600,
@@ -489,6 +489,43 @@ var tools = {
 				}
 			]
 		});
+	},
+	
+	showLogs: function() {
+		var addr = window.location.toString().substr(7);
+		addr = addr.substr(0, addr.indexOf(":"));
+		addr = "ws://" + addr + ":8001";
+
+		var webSocket = new WebSocket(addr);
+
+		$("#syslog").dialog({
+			title:"System logs",
+			modal:false,
+			resizable:true,
+			width: 800,
+			height: 400
+		}).on('dialogclose', function(event) {
+			webSocket.close();
+		});
+		
+		webSocket.onopen = function(event) {
+
+		};
+
+		webSocket.onmessage = function(event) {
+			var arr = JSON.parse(event.data);
+			for(var i = 0; i < arr.length; i++) {
+				if(arr[i]) {
+					$("#logs").append('<div>' + arr[i] + '</div>');
+				}
+			}
+			var scrollBottom = $("#logs").scrollTop() + $("#logs").height();
+			$("#logs").parent().scrollTop(scrollBottom);
+		};
+
+		webSocket.onclose = function(event) {
+			
+		};
 	},
 	
 	setAction: function() {
