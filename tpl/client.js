@@ -401,67 +401,98 @@ var tools = {
 		});
 	},
 	
+	ruleBuilder: {
+		new_proto: { def: "none", pref: " -p ", name: "Proto", list: ["none", "TCP", "UDP", "ICMP", "GRE"] },
+		new_in: { def: "", pref: " -i ", name: "Input" },
+		new_out: { def: "", pref: " -o ", name: "Output" },
+		new_dest: { def: "", pref: " -d ", name: "Dest", pdef: true, sub: { new_dst_port_from: { def: "", pref: " --dport ", name: "from", size: 40, sub: { new_dst_port_to: { def: "", pref: ":", name: "to", size: 40 } } } } },
+		new_src: { def: "", pref: " -s ", name: "Source", pdef: true, sub: { new_src_port_from: { def: "", pref: " --sport ", name: "from", size: 40, sub: { new_src_port_to: { def: "", pref: ":", name: "to", size: 40 } } } } },
+		new_state: { def: "none", pref: " -m state --state ", name: "State", list: ["none", "NEW", "ESTABLISHED", "RELATED", "INVALID"] },
+		new_limit: { def: "", pref: " -m limit --limit ", name: "Limit" },
+		new_action: { def: "", pref: " -j ", name: "Action", list: ["ACCEPT", "DROP", "DNAT", "SNAT", "MARK", "LOG", "MASQUERADE", "MIRROR", "REDIRECT", "RETURN", "TOS", "TTL"],
+			asvalue: {
+				DNAT: {	new_to_destination: { def: "", pref: " --to-destination ", name: "destination"} },
+				SNAT: {	new_to_source: { def: "", pref: " --to-source ", name: "source"} },
+				MARK: {	new_set_mark: { def: "", pref: " --set-mark ", name: "mark"} },
+				REDIRECT: {	new_to_ports: { def: "", pref: " --to-ports ", name: "to ports"} },
+				TOS: {	new_tos: { def: "", pref: "  --set-tos ", name: "tos"} },
+				TTL: {	new_ttl: { def: "", pref: "  --ttl-set ", name: "ttl"} },
+				LOG: {
+					new_log_prefix: { def: "", pref: " --log-prefix \"", suff: "\"", name: "prefix", size: 60},
+					new_log_level: { def: "", pref: " --log-level ", name: "level", size: 40}
+				}
+			}
+		}
+	},
+
+	makeTextField: function(name, rule) {
+		var value = '<input type="text" id="' + name + '"';
+		if(rule.size) {
+			value += ' style="width: ' + rule.size + 'px;"';
+		}
+		value += "/>";
+		if(rule.sub) {
+			for(var sub in rule.sub) {
+				value += " " + rule.sub[sub].name + " " + tools.makeTextField(sub, rule.sub[sub]);
+			}
+		}
+		return value;
+	},
+	
 	addDialogRule: function() {
+
+		var text = "";
+		for(var rule in tools.ruleBuilder) {
+			var obj = tools.ruleBuilder[rule];
+			var value = "";
+			if(obj.list) {
+				value = '<select id="' + rule + '" onchange="tools.setAction(this);">';
+				for(var item in obj.list) {
+					value += '<option>' + obj.list[item] + '</option>';
+				}
+				value += '</select>';
+				if(obj.asvalue) {
+					value += ' <span id="' + rule + '_sub"></span>';
+				}
+			}
+			else {
+				value = tools.makeTextField(rule, obj);
+			}
+			text += '<tr><td>' + obj.name + '</td><td>' + value + '</td></ts>';
+		}
+		$("#ruleTable").html(text);
+		
 		$("#makeRule").dialog({
 			title:"Make rule",
 			modal:true,
 			resizable:false,
-			width: 600,
+			width: 500,
 			buttons: [
 				{
 					text: "Add",
 					click: function() {
-						var rule = "";
-						var proto = $("#new_proto").val();
-						rule += proto === "none" ? "" : " -p " + proto;
-						
-						var _in = $("#new_in").val();
-						rule += _in === "" ? "" : " -i " + _in;
-						
-						var _out = $("#new_out").val();
-						rule += _out === "" ? "" : " -o " + _out;
-						
-						var _dest = $("#new_dest").val();
-						rule += _dest === "" ? "" : " -d " + _dest;
-						
-						var _src = $("#new_src").val();
-						rule += _src === "" ? "" : " -s " + _src;
-						
-						var _from = $("#new_dst_port_from").val();
-						var _to = $("#new_dst_port_to").val();
-						if(_from !== "" || _to !== "") {
-							rule += _from === "" ? "" : " --dport " + _from;
-							if(_to !== "") {
-								rule += ":" + _to;
+						var maker = function(rules) {
+							var rule = "";
+							for(var field in rules) {
+								var obj = rules[field];
+								var value = $("#" + field).val();
+								if(value !== obj.def) {
+									rule += obj.pref + value;
+									if(obj.suff) {
+										rule += obj.suff;
+									}
+									if(obj.asvalue) {
+										rule += maker(obj.asvalue[value]);
+									}
+								}
+								if(obj.sub && (obj.pdef || value !== obj.def)) {
+									rule += maker(obj.sub);
+								}
 							}
-						}
-						_from = $("#new_src_port_from").val();
-						_to = $("#new_src_port_to").val();
-						if(_from !== "" || _to !== "") {
-							rule += _from === "" ? "" : " --sport " + _from;
-							if(_to !== "") {
-								rule += ":" + _to;
-							}
-						}
-						
-						var _state = $("#new_state").val();
-						rule += _state === "none" ? "" : " -m state --state " + _state;
-						
-						var _limit = $("#new_limit").val();
-						rule += _limit === "" ? "" : " -m limit --limit " + _limit;
-						
-						var _action = $("#new_action").val();
-						rule += " -j " + _action;
-						if(_action === "DNAT") {
-							rule += " --to-destination " + $("#new_to_destination").val();
-						}
-						else if(_action === "LOG") {
-							var _prefix = $("#new_log_prefix").val();
-							rule += _prefix === "" ? "" : " --log-prefix \"" + _prefix + "\"";
-							var _level = $("#new_log_level").val();
-							rule += _level === "" ? "" : " --log-level " + _level;
-						}
-						
+							return rule;
+						};
+
+						var rule = maker(tools.ruleBuilder);
 						$("#rule").val(rule);
 						
 						$("#makeRule").dialog("close");
@@ -470,25 +501,38 @@ var tools = {
 				{
 					text: "Reset",
 					click: function() {
-						$("#new_proto").val("none");
-						$("#new_in").val("");
-						$("#new_out").val("");
-						$("#new_dest").val("");
-						$("#new_src").val("");
-						$("#new_dst_port_from").val("");
-						$("#new_dst_port_to").val("");
-						$("#new_src_port_from").val("");
-						$("#new_src_port_to").val("");
-						$("#new_state").val("none");
-						$("#new_limit").val("");
-						$("#new_action").val("ACCEPT").change();
-						$("#new_to_destination").val("");
-						$("#new_log_prefix").val("");
-						$("#new_log_level").val("");
+						var reset = function(rules) {
+							for(var field in rules) {
+								var obj = rules[field];
+								$("#" + field).val(obj.def);
+								if(obj.sub) {
+									reset(obj.sub);
+								}
+								if(obj.asvalue) {
+									$("#" + field).change();
+									for(var field2 in obj.asvalue) {
+										reset(obj.asvalue[field2]);
+									}
+								}
+							}
+						};
+						reset(tools.ruleBuilder);
 					}
 				}
 			]
 		});
+	},
+	
+	setAction: function(obj) {
+		var id = obj.id;
+		if($("#" + id + "_sub").size() !== 0) {
+			var text = "";
+			for(var field in tools.ruleBuilder[id].asvalue[$("#" + id).val()]) {
+				var obj = tools.ruleBuilder[id].asvalue[$("#" + id).val()][field];
+				text += " " + obj.name + " " + tools.makeTextField(field, obj);
+			}
+			$("#" + id + "_sub").html(text);
+		}
 	},
 	
 	showLogs: function() {
@@ -526,9 +570,5 @@ var tools = {
 		webSocket.onclose = function(event) {
 			
 		};
-	},
-	
-	setAction: function() {
-		$("#action_sub").html(window.tpl.actionSub($("#new_action").val()));
 	}
 };
