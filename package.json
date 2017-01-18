@@ -1,0 +1,28 @@
+{
+  "name": "iptables",
+  "version": "1.0.0",
+  "description": "iptables WEB gui ",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/puux/iptables.git"
+  },
+  "keywords": [
+    "iptables",
+    "web",
+    "gui"
+  ],
+  "author": "puux",
+  "license": "GPL-2.0",
+  "bugs": {
+    "url": "https://github.com/puux/iptables/issues"
+  },
+  "homepage": "https://github.com/puux/iptables#readme",
+  "dependencies": {
+    "nodejs-websocket": "^1.7.1"
+  }
+}

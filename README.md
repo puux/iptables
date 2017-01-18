@@ -4,9 +4,7 @@ iptables WEB gui
 
 ### Howto install ###
 
-1. Download and install Node.js
-2. Install websocket: npm install nodejs-websocket
-3. Export node_modules path: export NODE_PATH={nodejs path}/bin/node_modules
+In first time you need to Download and install Node.js
 
 ### Howto use ###
 
@@ -17,6 +15,9 @@ git clone https://github.com/puux/iptables.git
 * Run server:
 ```bash
 cd iptables
+# only for first time you, need to download dependancies
+npm install
+# and then you can start the server
 node server.js
 ```
 * Open browser and goto http://127.0.0.1:1337/
