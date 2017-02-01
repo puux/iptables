@@ -404,10 +404,10 @@ var tools = {
 	
 	ruleBuilder: {
 		new_proto: { def: "none", pref: " -p ", name: "Proto", list: ["none", "TCP", "UDP", "ICMP", "GRE"] },
-		new_in: { def: "", pref: " -i ", name: "Input" },
-		new_out: { def: "", pref: " -o ", name: "Output" },
-		new_dest: { def: "", pref: " -d ", name: "Dest", pdef: true, sub: { new_dst_port_from: { def: "", pref: " --dport ", name: "from", size: 40, sub: { new_dst_port_to: { def: "", pref: ":", name: "to", size: 40 } } } } },
-		new_src: { def: "", pref: " -s ", name: "Source", pdef: true, sub: { new_src_port_from: { def: "", pref: " --sport ", name: "from", size: 40, sub: { new_src_port_to: { def: "", pref: ":", name: "to", size: 40 } } } } },
+		new_in: { def: "", pref: " -i ", name: "Input", hint: "eth0" },
+		new_out: { def: "", pref: " -o ", name: "Output", hint: "wlan0" },
+		new_dest: { def: "", pref: " -d ", name: "Dest", hint: "8.8.0.0/16", pdef: true, sub: { new_dst_port_from: { def: "", pref: " --dport ", name: "from", size: 40, sub: { new_dst_port_to: { def: "", pref: ":", name: "to", size: 40 } } } } },
+		new_src: { def: "", pref: " -s ", name: "Source", hint: "10.10.0.0/16", pdef: true, sub: { new_src_port_from: { def: "", pref: " --sport ", name: "from", size: 40, sub: { new_src_port_to: { def: "", pref: ":", name: "to", size: 40 } } } } },
 		new_state: { def: "none", pref: " -m state --state ", name: "State", list: ["none", "NEW", "ESTABLISHED", "RELATED", "INVALID"] },
 		new_limit: { def: "", pref: " -m limit --limit ", name: "Limit" },
 		new_action: { def: "", pref: " -j ", name: "Action", list: ["ACCEPT", "DROP", "DNAT", "SNAT", "MARK", "LOG", "MASQUERADE", "MIRROR", "REDIRECT", "RETURN", "TOS", "TTL"],
@@ -430,6 +430,9 @@ var tools = {
 		var value = '<input type="text" id="' + name + '"';
 		if(rule.size) {
 			value += ' style="width: ' + rule.size + 'px;"';
+		}
+		if(rule.hint) {
+			value += ' placeholder="' + rule.hint + '"';
 		}
 		value += "/>";
 		if(rule.sub) {
