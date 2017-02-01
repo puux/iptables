@@ -1,0 +1,68 @@
+// theme config
+// Navajo
+$mainColor: NavajoWhite;
+$borderColor: darken($mainColor, 20%);
+$shadowColor: #ccc;
+$documentBgColor: lighten($mainColor, 10%);
+$textColor: black;
+// Silver
+$mainColor: #eee;
+$borderColor: darken($mainColor, 20%);
+$documentBgColor: lighten($mainColor, 2%);
+// Dark gray
+// $mainColor: #444;
+// $borderColor: darken($mainColor, 20%);
+// $textColor: white;
+// $documentBgColor: #333;
+// $shadowColor: #111;
+// $ruleChannel: #8e8eda;
+// $rulePort: #8e8eda;
+// $ruleComment: #8e8eda;
+// $ruleDrop: #d44f4f;
+
+$fontSize: 12px;
+
+// table
+$tableTextColor: $textColor;
+$tableBgColor: $mainColor;
+$tableHeaderColor: white;
+$tableHeaderBgColor: darken($mainColor, 40%);
+$tableRowBgColor: darken($mainColor, 5%);
+
+// rule highlight
+$ruleDrop: red;
+$ruleAccept: green;
+$ruleNetworkAddress: gray;
+$rulePort: blue;
+$ruleComment: blue;
+$ruleChannel: blue;
+
+// info panels
+$errorTextColor: white;
+$errorBgColor: #f88;
+$infoTextColor: black;
+$infoBgColor: lightgreen;
+
+// menu
+$menuTextColor: $textColor;
+$menuBorderColor: $borderColor;
+$menuLightBgColor: $mainColor;
+$menuDarkBgColor: darken($menuLightBgColor, 7%);
+$menuSelectedBgColor: darken($menuLightBgColor, 30%);
+$subMenuBgColor: $mainColor;
+$subMenuBorderColor: $borderColor;
+$subMenuItemColor: darken($subMenuBgColor, 10%);
+
+// tool buttons
+$btnTextColor: $textColor;
+$btnBorderColor: $borderColor;
+$btnLightBgColor: $mainColor;
+$btnDarkBgColor: darken($menuLightBgColor, 7%);
+
+// ui dialogs
+$dlgTextColor: $textColor;
+$dlgBgColor: $mainColor;
+$dlgCaptionBgColor: darken($mainColor, 40%);
+
+$listItemActiveBgColor: darken($mainColor, 5%);
+$listItemSelectedBgColor: darken($mainColor, 15%);

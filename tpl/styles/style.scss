@@ -1,0 +1,314 @@
+@import "config.scss";
+
+html, body {
+	padding: 0;
+	margin: 0;
+	font-size: $fontSize;
+    background-color: $documentBgColor;
+}
+
+.content {
+	width: 1000px;
+	margin: auto;
+}
+
+input {
+    margin: 0;
+    border: 1px solid $borderColor;
+    color: $textColor;
+    background-color: $documentBgColor;
+}
+
+// table style
+.main {
+    border: 1px solid $borderColor;
+	background-color: $tableBgColor;
+    color: $tableTextColor;
+	width: 100%;
+	margin-top: 10px;
+
+    .ruleeditor {
+        font-family: monospace;
+    }
+    input {
+        width: 100%;
+    }
+
+    // columns title
+    th { color: $tableHeaderColor; background-color: $tableHeaderBgColor; }
+    .id {
+        width: 30px;
+        text-align: center;
+    }
+    .mon {
+        width: 46px;
+        text-align: center;
+    }
+    .rule {
+        text-align: center;
+    }
+    .cmd {
+        width: 35px;
+        text-align: center;
+    }
+    
+    // rows body
+    .row {
+        background-color: $tableRowBgColor;
+        height: 21px;
+        padding: 0 5px;
+     
+        .edit {
+            display: none;
+            cursor: pointer;
+            position: absolute;
+            margin-top: 0px;
+        }
+        .edittext:hover .edit {
+            display: inherit;
+        }
+    }
+    .rowright {
+        background-color: $tableRowBgColor;
+        text-align: right;
+    }
+    .rowcenter {
+        background-color: $tableRowBgColor;
+        text-align: center;
+    }
+
+    .newrulerow {
+        td:nth-child(1) { text-align: right; }
+        td:nth-child(3) { text-align: center; }
+    }
+}
+
+// Highlight styles
+.ipt-DROP {
+	color: $ruleDrop;
+}
+
+.ipt-ACCEPT {
+	color: $ruleAccept;
+}
+
+.ipt-net {
+	color: $ruleNetworkAddress;
+}
+
+.ipt-port {
+	color: $rulePort;
+}
+
+.ipt-channel {
+    color: $ruleChannel;
+}
+
+.ipt-comment {
+	color: $ruleComment;
+	font-style: italic;
+}
+
+// panels
+.error {
+	color: $errorTextColor;
+	padding: 15px;
+	text-align: center;
+	display: none;
+    border: 1px solid darken($errorBgColor, 15%);
+	background-color: $errorBgColor;
+	cursor: pointer;
+	position: static;
+}
+
+.info {
+	color: $infoTextColor;
+	padding: 15px;
+	text-align: center;
+	display: none;
+	border: 1px solid darken($infoBgColor, 15%);
+	background-color: $infoBgColor;
+	cursor: pointer;
+	position: static;
+}
+
+@mixin gradient($from, $to) {
+    background: -webkit-gradient(linear, 0 0, 0 100%, from($from), to($to));
+    background: -moz-linear-gradient(top,  $from,  $to);
+    background-image: -o-linear-gradient(top,  $from,  $to);
+    background: -ms-linear-gradient(top,  $from,  $to);
+}
+
+/* Main menu */
+.mainmenu {
+	border: 1px solid $menuBorderColor; color: $menuTextColor;
+    margin: 5px auto 0;
+	border-radius: 5px;
+	padding: 3px;
+    text-align: center;
+    @include gradient($menuLightBgColor, $menuDarkBgColor);
+}
+
+ul {
+    &.tabs {
+        display: table; padding: 0 0px; list-style: none; position: relative;
+        li {
+            margin: 0; padding: 0; list-style: none; display: table-cell; float: left; position: relative;
+            &:hover	{
+                @include gradient(lighten($menuLightBgColor, 7%), lighten($menuDarkBgColor, 7%));
+                &:first-child { border-top-left-radius: 5px; border-bottom-left-radius: 5px; }
+                &:last-child { border-top-right-radius: 5px; border-bottom-right-radius: 5px; }
+            }
+        }
+        a { position: relative; display: block; cursor: pointer; }
+        .item {
+            padding: 4px 15px;
+            text-decoration: none;
+        }
+        .itemselect {
+            padding: 4px 15px;
+            text-decoration: none;
+            background-color: $menuSelectedBgColor;
+       }
+    }
+    
+    &.dropdown {
+		margin: 0 0 0 -36px;
+        padding: 0px;
+        display: block;
+        position: absolute;
+        z-index: 999;
+        top: 100%; left: 0;
+        display: none;
+		border: 1px solid $subMenuBorderColor;
+        background-color: $subMenuBgColor;
+        box-shadow: 0 0 4px $shadowColor;
+        
+        ul.dropdown { top: 0; left: 95%; }
+        li {
+            margin: 0; padding: 1px; float: none; position: relative; list-style: none; display: block; 
+            &:hover { background: none; }
+            a {
+                display: block; padding: 5px 15px; text-decoration: none; text-align: center; width: 200px;
+                background-color: $subMenuItemColor;
+                &:hover { background-color: lighten($subMenuItemColor, 7%); }
+            }
+        }
+        .first-row	{ float:left; }
+        .second-row	{ float:right; }
+        .large		{ width: 284px; left:-60px; }
+    }
+}
+
+/* Tool buttons */
+.tools	{
+    padding: 10px;
+    height: 24px;
+    text-align: center;
+    
+    .button	{
+        color: $btnTextColor;
+        padding: 5px 11px;
+        text-decoration: none;
+        float:right;
+        cursor: pointer;
+        height: 15px;
+        margin-left: 5px;
+        border-radius: 5px;
+        @include gradient($btnLightBgColor, $btnDarkBgColor);
+        border: 1px solid $btnBorderColor;
+        box-shadow: 0 0 5px $shadowColor;
+
+        &:hover {
+            @include gradient(lighten($btnLightBgColor, 7%), lighten($btnDarkBgColor, 7%));
+        }
+
+        &[disabled=disabled] {
+            background-color: #ccc;
+            color:#999;
+            @include gradient(darken($btnLightBgColor, 7%), darken($btnDarkBgColor, 7%));
+            cursor: default;
+        }
+        .icon { float: right; margin: 0 4px; }
+    }
+}
+
+/* Dialogs */
+.settings {
+	display: none;
+
+    .splitter {
+        background-color: darken($mainColor, 5%);
+        padding: 3px;
+        font-weight: bold;
+    }
+}
+
+.addchain {
+	display: none;
+}
+
+.dialog {
+	display: none;
+}
+
+#user-select-category {
+    height: 200px; width: 140px;
+    border: 1px solid $borderColor;
+    vertical-align: top; float: left;
+    
+    .item {
+        padding: 3px;
+        &:hover	{ background-color: $listItemActiveBgColor; cursor: pointer; }
+    }
+    .itemselected { padding: 3px; background-color: $listItemSelectedBgColor; }
+    .item-icon { float: left; margin-right: 5px; }
+}
+
+#settings-page1, #settings-page2, #settings-page3 {
+    height: 200px; padding: 0px; display: none;
+    border: 1px solid $borderColor;
+    vertical-align: top; margin-left: 145px; overflow: auto;
+}
+
+.authform {
+	border: 1px solid gray;
+	background-color: #ccc;
+	margin: auto;
+	margin-top: 100px;
+	padding: 15px;
+
+    td {
+        text-align: right;
+    }
+}
+
+.ui-dialog {
+    background-color: $dlgBgColor !important;
+    box-shadow: 5px 5px 10px $shadowColor;
+    .ui-widget-header { background: $dlgCaptionBgColor !important; }
+    .ui-widget-content { background: transparent !important; color: $dlgTextColor !important; }
+    .ui-dialog-buttonpane { padding: 0; }
+    .ui-state-hover {
+        background: darken($mainColor, 30%);
+        box-shadow: inherit;
+        border-color: $borderColor;
+    }
+    .ui-button {
+        box-shadow: 0 0 5px $shadowColor;
+        color: $btnTextColor;
+        margin-left: 5px;
+        border-radius: 5px;
+        border: 1px solid $btnBorderColor;
+        @include gradient($btnLightBgColor, $btnDarkBgColor);
+        &:hover { @include gradient(lighten($btnLightBgColor, 7%), lighten($btnDarkBgColor, 7%)); }
+    }
+    .main { border: 0; margin-top: 0; }
+}
+
+@media(max-width:1000px) {
+    .content { width: inherit; }
+    .button { margin-bottom: 5px; }
+    .ui-dialog { left: 0; max-width: 95%; }
+    #logs div { white-space: nowrap; }
+}

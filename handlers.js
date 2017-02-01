@@ -12,7 +12,9 @@ module.exports = {
 	_settings: {
 		savePath: "/etc/iptables/rules.save",
 		user: "admin",
-		pass: ""
+		pass: "",
+		theme: "Silver",
+		themes: []
 	},
 	
 	loadSettings: function() {
@@ -180,6 +182,12 @@ module.exports = {
 			res.end();
 		}
 		else {
+			var themes = [];
+			var items = fs.readdirSync("./tpl/theme");
+			for (var item of items) {
+				themes.push(item.substring(0, item.length-4));
+			}
+			module.exports._settings.themes = themes;
 			res.end(JSON.stringify(module.exports._settings));
 		}
 	},

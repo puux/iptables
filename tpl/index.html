@@ -3,9 +3,10 @@
 
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 
-		<link rel="stylesheet" href="style.css" type="text/css"/>
 		<link rel="stylesheet" href="jquery-ui.css" type="text/css"/>
+		<link rel="stylesheet" id="theme" href="theme/Silver.css" type="text/css"/>
 
 		<script type="text/javascript" src="jquery.min.js"></script> 
 		<script type="text/javascript" src="jquery-ui.min.js"></script> 
@@ -60,7 +61,7 @@
 					</ul>
 				</li>
 				<li>
-					<a class="item" onclick="rules.addChain();">Custom ↓</a>
+					<a class="item">Custom ↓</a>
 					<ul class="dropdown" style="display: none;" id="customchains">
 						
 					</ul>
@@ -92,6 +93,10 @@
 						<tr>
 							<td>Save rule path</td><td><input class="param" type="text" id="savePath"/></td>
 						</tr>
+						<tr><td colspan="2" class="splitter">Appearance</td></tr>
+						<tr>
+							<td>Theme</td><td><select id="themeSelector"></select></td>
+						</tr>
 						<tr><td colspan="2" class="splitter">Security</td></tr>
 						<tr>
 							<td>Login</td><td><input class="param" type="text" id="user"/></td>
@@ -103,13 +108,13 @@
 				</div>
 				<div id="settings-page2" style="display: none;">
 					<table width="100%" id="lans" class="main">
-						<tr><td class="cmd">Network</td><td class="rule">Alias</td><td class="mon"></td></tr>
+						<tr><th class="cmd">Network</th><th class="rule">Alias</th><th class="cmd"></th></tr>
 					</table>
 					<div class="tools"><a class="button" onclick="tools.addLan();">Add lan</a></div>
 				</div>
 				<div id="settings-page3" style="display: none;">
 					<table width="100%" id="ports" class="main">
-						<tr><td class="cmd">Port</td><td class="rule">Alias</td><td class="mon"></td></tr>
+						<tr><th class="cmd">Port</th><th class="rule">Alias</th><th class="cmd"></th></tr>
 					</table>
 					<div class="tools"><a class="button" onclick="tools.addPort();">Add port</a></div>
 				</div>

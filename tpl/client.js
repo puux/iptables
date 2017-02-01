@@ -18,6 +18,7 @@ $(document).ready(function(){
 	});
 	
 	setInterval(rules.monitor, 1000);
+	tools.selectPage(1);
 });
 
 $(function () {
@@ -64,7 +65,7 @@ var parser = {
 		
 		var arr = JSON.parse(data);
 
-		$("#main").html('<tr><td class="id">ID</td><td class="mon">pkts</td><td class="mon">bytes</td><td class="rule">RULE</td><td class="cmd">CMD</td></tr>');
+		$("#main").html('<tr><th class="id">ID</th><th class="mon">pkts</th><th class="mon">bytes</th><th class="rule">RULE</th><th class="cmd">CMD</th></tr>');
 
 		var index = 0;
 		for(var line in arr) {
@@ -75,7 +76,7 @@ var parser = {
 			index++;
 		}
 
-		$("#main").append('<tr><td colspan="3">Add new rule:</td><td colspan="1"><form onsubmit="return rules.insert();"><input type="text" id="rule" class="ruleeditor"/></form></td><td><a href="#" onclick="return tools.addDialogRule();" title="Add rule"><img src="/img/make.png"/></a></td></tr>');
+		$("#main").append('<tr class="newrulerow"><td colspan="3">New rule:</td><td colspan="1"><form onsubmit="return rules.insert();"><input type="text" id="rule" class="ruleeditor"/></form></td><td><a href="#" onclick="return tools.addDialogRule();" title="Add rule"><img src="/img/make.png"/></a></td></tr>');
 	},
 	
 	makeRuleTpl: function (index, text) {
@@ -86,7 +87,7 @@ var parser = {
 				'<td class="rowright" id="pkts' + index + '"></td>' +
 				'<td class="rowright" id="bytes' + index + '"></td>' +
 				'<td class="row" id="rule' + index + '"><span class="edittext">' + ntext + '<img class="edit" src="/img/edit.png" onclick="parser.editRule(' + index + ')"/></spawn></td>' +
-				(index ? '<td class="row"><a href="#" onclick="return rules.remove(' + index + ');" title="Delete"><img src="/img/delete.png"/></a>' + "</td>" : '<td class="row"></td>') +
+				(index ? '<td class="rowcenter"><a href="#" onclick="return rules.remove(' + index + ');" title="Delete"><img src="/img/delete.png"/></a>' + "</td>" : '<td class="row"></td>') +
 				"</tr>";
 	},
 	
@@ -118,7 +119,7 @@ var parser = {
 				if(parser.FIN_RULES[name]) {
 					return "-j " + name;
 				}
-				return '-j <a href="javascript: rules.showList(\'' + lname + '\', \'' + table + '\');">' + name + "</a>";
+				return '-j <a class="ipt-channel" href="javascript: rules.showList(\'' + lname + '\', \'' + table + '\');">' + name + "</a>";
 			});
 
 		return text;

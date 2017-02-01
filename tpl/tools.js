@@ -27,6 +27,16 @@ $(document).ready(function(){
 		if(_settings.pass) {
 			$("#logout").show();
 		}
+
+		$("#theme").attr("href", "theme/" + _settings.theme + ".css");
+		for(var i in _settings.themes) {
+			var theme = _settings.themes[i];
+			$("#themeSelector").append("<option " + (theme == _settings.theme ? "selected" : "") + ">" + theme + "</option>");
+		}
+		$("#themeSelector").on("change", function(){
+			$("#theme").attr("href",  "theme/" + this.value + ".css");
+			_settings.theme = this.value;
+		});
 	});
 });
 
