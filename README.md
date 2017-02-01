@@ -1,6 +1,6 @@
 iptables WEB gui
 
-![ScreenShot](http://i.mcgl.ru/qQtzdZroR3)
+![ScreenShot](http://i.mcgl.ru/RGGJv4MAvA)
 
 ### Howto install ###
 
@@ -21,3 +21,10 @@ npm install
 node server.js
 ```
 * Open browser and goto http://127.0.0.1:1337/
+
+### Howto create own theme ###
+
+* cd ./tpl/styles/
+* open and change config.scss
+* compile: scss --sourcemap=none style.scss ../theme/MyTheme.css
+* select theme in Settings->Theme
