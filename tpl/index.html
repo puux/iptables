@@ -74,6 +74,7 @@
 
 			<div class="tools">
 				<a class="button" href="/logout" id="logout" style="display: none;">Logout <img class="icon" src="/img/logout.png"/></a>
+				<a class="button" onclick="tools.showTCPDump();" title="Show TCP dump console">TcpDump <img class="icon" src="/img/tcpdump.png"/></a>
 				<a class="button" onclick="tools.showLogs();" title="Show system logs">SysLogs <img class="icon" src="/img/logs.png"/></a>
 				<a class="button" onclick="tools.load();" title="Load rules from file">Load <img class="icon" src="/img/load.png"/></a>
 				<a class="button" onclick="tools.save();" title="Save rules into file">Save <img class="icon" src="/img/save.png"/></a>
@@ -133,8 +134,27 @@
 				</table>
 			</div>
 			<div class="dialog" id="syslog">
-				<div id="logs">
+				<div id="logs" class="logpanel">
 					
+				</div>
+			</div>
+			<div class="dialog" id="tcpdump">
+				<div class="content">
+					<div class="params">
+						<span>Dev:</span>
+						<input id="eth" placeholder="eth0">
+						<span>Src:</span>
+						<input id="src" placeholder="127.0.0.1">
+						<span>Dest:</span>
+						<input id="dst" placeholder="127.0.0.1">
+						<span>Port:</span>
+						<input id="port" placeholder="80">
+						<button onclick="tools.dumpParams();">Apply</button>
+						<button onclick='$("#dump").html("");'>Clear</button>
+					</div>
+					<div id="dump" class="logpanel">
+						
+					</div>
 				</div>
 			</div>
 		</div>

@@ -55,15 +55,62 @@ console.log('Server running at http://*:1337/');
 // ------------------ WebSocket ------------------------------------------------
 var proc = require('child_process');
 var ws = require("nodejs-websocket");
+var log = null;
+var dump = null;
+
+function closeLogs() {
+	if(log) {
+		log.kill('SIGHUP');
+		log = null;
+	}
+}
+
+function closeDump() {
+	if(dump) {
+		dump.kill('SIGHUP');
+		dump = null;
+	}
+}
 
 var server = ws.createServer(function (conn) {
-
-	var log = proc.spawn("tail", ["-f", "/var/log/syslog"]);
-	log.stdout.on('data', function (data) {
-		conn.sendText(JSON.stringify(data.toString().split("\n")));
-	});
-
+	conn.on("text", function (data) {
+		var params = JSON.parse(data);
+		if(params.name == "syslog") {
+			log = proc.spawn("tail", ["-f", "/var/log/syslog"]);
+			log.stdout.on('data', function (lines) {
+				var outData = {name: params.name, data: lines.toString().split("\n")};
+				if(log)
+					conn.sendText(JSON.stringify(outData));
+			});
+		}
+		else if(params.name == "dump") {
+			var args = ["-i", params.eth, "-n", "-l"];
+			if(params.port)
+				args.push("port", params.port);
+			if(params.src)
+				args.push("src", params.src);
+			if(params.dst) {
+				if(params.src)
+					args.push("or");
+				args.push("dst", params.dst);
+			}
+			conn.sendText(JSON.stringify({name: params.name, data: ["Exec tcpdump with args: " + args.toString()]}));
+			dump = proc.spawn("tcpdump", args);
+			dump.stdout.on('data', function (lines) {
+				var outData = {name: params.name, data: lines.toString().split("\n")};
+				if(dump)
+					conn.sendText(JSON.stringify(outData));
+			});
+		}
+		else if(params.name == "closelog") {
+			closeLogs();
+		}
+		else if(params.name == "closedump") {
+			closeDump();
+		}
+    });
 	conn.on("close", function (code, reason) {
-		log.kill('SIGHUP');
+		closeLogs();
+		closeDump();
 	});
 }).listen(8001);

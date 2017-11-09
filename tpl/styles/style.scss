@@ -249,7 +249,26 @@ ul {
 }
 
 .dialog {
-	display: none;
+    display: none;
+    .content {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+
+        .params {
+            padding-bottom: 10px;
+            input {
+                margin: 3px;
+                width: 115px;
+            }
+        }
+        .logpanel {
+            overflow: auto;
+            white-space: nowrap;
+            flex-grow: 1;
+        }
+    }
 }
 
 #user-select-category {

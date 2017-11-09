@@ -1,5 +1,6 @@
 var channel = "";
 var table = "";
+var webSocket;
 
 $(document).ready(function(){
 	rules.showList("input", "filter");
@@ -538,14 +539,59 @@ var tools = {
 			$("#" + id + "_sub").html(text);
 		}
 	},
+
+	initWS: function(hello) {
+		if(!webSocket) {
+			var addr = window.location.toString().substr(7);
+			addr = addr.substr(0, addr.indexOf(":"));
+			addr = "ws://" + addr + ":8001";
+
+			webSocket = new WebSocket(addr);
+			webSocket.onopen = function(event) {
+				webSocket.send(hello);
+			};
+
+			webSocket.onmessage = function(event) {
+				var channel = JSON.parse(event.data);
+				if(channel.name == "syslog") {
+					for(var i = 0; i < channel.data.length; i++) {
+						if(channel.data[i]) {
+							$("#logs").append('<div>' + channel.data[i] + '</div>');
+						}
+					}
+					$("#logs").parent().scrollTop(64536);
+				}
+				else if(channel.name == "dump") {
+					for(var i = 0; i < channel.data.length; i++) {
+						if(channel.data[i]) {
+							var text = channel.data[i].replace(/IP ([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)/g, function(str, ip){
+								return '<span class="ipt-net">' + ip + "</span>";
+							}).replace(/> ([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)/g, function(str, ip){
+								return '> <span class="ipt-net">' + ip + "</span>";
+							});
+							$("#dump").append('<div>' + text + '</div>');
+						}
+					}
+					$("#dump").scrollTop(64536);
+				}
+			};
+
+			webSocket.onclose = function(event) {
+				webSocket = null;
+			};
+		}
+		else {
+			webSocket.send(hello);
+		}
+	},
+
+	closeWS: function(name){
+		if(webSocket) {
+			webSocket.send(name);
+		}
+	},
 	
 	showLogs: function() {
-		var addr = window.location.toString().substr(7);
-		addr = addr.substr(0, addr.indexOf(":"));
-		addr = "ws://" + addr + ":8001";
-
-		var webSocket = new WebSocket(addr);
-
 		$("#syslog").dialog({
 			title:"System logs",
 			modal:false,
@@ -553,26 +599,27 @@ var tools = {
 			width: 800,
 			height: 400
 		}).on('dialogclose', function(event) {
-			webSocket.close();
+			tools.closeWS(JSON.stringify({name: "closelog"}));
 		});
-		
-		webSocket.onopen = function(event) {
+		tools.initWS(JSON.stringify({name: "syslog"}));
+	},
 
-		};
+	showTCPDump: function() {
+		$("#tcpdump").dialog({
+			title:"TCP dump",
+			modal:false,
+			resizable:true,
+			width: 800,
+			height: 400
+		}).on('dialogclose', function(event) {
+			tools.closeWS(JSON.stringify({name: "closedump"}));
+			$("#dump").html("");
+		});
+	},
 
-		webSocket.onmessage = function(event) {
-			var arr = JSON.parse(event.data);
-			for(var i = 0; i < arr.length; i++) {
-				if(arr[i]) {
-					$("#logs").append('<div>' + arr[i] + '</div>');
-				}
-			}
-			var scrollBottom = $("#logs").scrollTop() + $("#logs").height();
-			$("#logs").parent().scrollTop(scrollBottom);
-		};
-
-		webSocket.onclose = function(event) {
-			
-		};
+	dumpParams: function() {
+		$("#dump").html("");
+		tools.closeWS(JSON.stringify({name: "closedump"}));
+		tools.initWS(JSON.stringify({name: "dump", eth: $("#eth").val(), src: $("#src").val(), dst: $("#dst").val(), port: $("#port").val()}));
 	}
 };

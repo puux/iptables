@@ -61,7 +61,7 @@ input {
     text-align: center; }
 
 .ipt-DROP {
-  color: red; }
+  color: #d44f4f; }
 
 .ipt-ACCEPT {
   color: green; }
@@ -84,7 +84,7 @@ input {
   padding: 15px;
   text-align: center;
   display: none;
-  border: 1px solid #ff3b3b;
+  border: 1px solid #ff3c3c;
   background-color: #f88;
   cursor: pointer;
   position: static; }
@@ -237,6 +237,20 @@ ul.dropdown {
 
 .dialog {
   display: none; }
+  .dialog .content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%; }
+    .dialog .content .params {
+      padding-bottom: 10px; }
+      .dialog .content .params input {
+        margin: 3px;
+        width: 115px; }
+    .dialog .content .logpanel {
+      overflow: auto;
+      white-space: nowrap;
+      flex-grow: 1; }
 
 #user-select-category {
   height: 200px;
