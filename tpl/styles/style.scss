@@ -19,13 +19,17 @@ input {
     background-color: $documentBgColor;
 }
 
+.chainpath {
+    padding: 4px;
+    color: $textColor;
+}
+
 // table style
 .main {
     border: 1px solid $borderColor;
 	background-color: $tableBgColor;
     color: $tableTextColor;
 	width: 100%;
-	margin-top: 10px;
 
     .ruleeditor {
         font-family: monospace;

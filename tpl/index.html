@@ -25,39 +25,39 @@
 		<div class="content">
 			<ul class="tabs mainmenu">
 				<li>
-					<a class="item" onclick="rules.showList('input', 'filter');">INPUT</a>
+					<a class="item" onclick="rules.showListWithPath('input', 'filter');">INPUT</a>
 					<ul class="dropdown" style="display: none;">
-						<li><a class="item" onclick="rules.showList('input', 'filter');">filter</a></li>
-						<li><a class="item" onclick="rules.showList('input', 'mangle');">mangle</a></li>
+						<li><a class="item" onclick="rules.showListWithPath('input', 'filter');">filter</a></li>
+						<li><a class="item" onclick="rules.showListWithPath('input', 'mangle');">mangle</a></li>
 					</ul>
 				</li>
 				<li>
-					<a class="item" onclick="rules.showList('output', 'filter');">OUTPUT</a>
+					<a class="item" onclick="rules.showListWithPath('output', 'filter');">OUTPUT</a>
 					<ul class="dropdown" style="display: none;">
-						<li><a class="item" onclick="rules.showList('output', 'filter');">filter</a></li>
-						<li><a class="item" onclick="rules.showList('output', 'nat');">nat</a></li>
-						<li><a class="item" onclick="rules.showList('output', 'mangle');">mangle</a></li>
+						<li><a class="item" onclick="rules.showListWithPath('output', 'filter');">filter</a></li>
+						<li><a class="item" onclick="rules.showListWithPath('output', 'nat');">nat</a></li>
+						<li><a class="item" onclick="rules.showListWithPath('output', 'mangle');">mangle</a></li>
 					</ul>
 				</li>
 				<li>
-					<a class="item" onclick="rules.showList('forward', 'filter');">FORWARD</a>
+					<a class="item" onclick="rules.showListWithPath('forward', 'filter');">FORWARD</a>
 					<ul class="dropdown" style="display: none;">
-						<li><a class="item" onclick="rules.showList('forward', 'filter');">filter</a></li>
-						<li><a class="item" onclick="rules.showList('forward', 'mangle');">mangle</a></li>
+						<li><a class="item" onclick="rules.showListWithPath('forward', 'filter');">filter</a></li>
+						<li><a class="item" onclick="rules.showListWithPath('forward', 'mangle');">mangle</a></li>
 					</ul>
 				</li>
 				<li>
-					<a class="item" onclick="rules.showList('prerouting', 'nat');">PREROUTING</a>
+					<a class="item" onclick="rules.showListWithPath('prerouting', 'nat');">PREROUTING</a>
 					<ul class="dropdown" style="display: none;">
-						<li><a class="item" onclick="rules.showList('prerouting', 'nat');">nat</a></li>
-						<li><a class="item" onclick="rules.showList('prerouting', 'mangle');">mangle</a></li>
+						<li><a class="item" onclick="rules.showListWithPath('prerouting', 'nat');">nat</a></li>
+						<li><a class="item" onclick="rules.showListWithPath('prerouting', 'mangle');">mangle</a></li>
 					</ul>
 				</li>
 				<li>
-					<a class="item" onclick="rules.showList('postrouting', 'nat');">POSTROUTING</a>
+					<a class="item" onclick="rules.showListWithPath('postrouting', 'nat');">POSTROUTING</a>
 					<ul class="dropdown" style="display: none;">
-						<li><a class="item" onclick="rules.showList('postrouting', 'nat');">nat</a></li>
-						<li><a class="item" onclick="rules.showList('postrouting', 'mangle');">mangle</a></li>
+						<li><a class="item" onclick="rules.showListWithPath('postrouting', 'nat');">nat</a></li>
+						<li><a class="item" onclick="rules.showListWithPath('postrouting', 'mangle');">mangle</a></li>
 					</ul>
 				</li>
 				<li>
@@ -68,8 +68,15 @@
 				</li>
 			</ul>
 
-			<table id="main" class="main">
+			<div class="chainpath" id="chainpath"></div>
 
+			<table class="main">
+				<thead>
+					<tr><th class="id">ID</th><th class="mon">pkts</th><th class="mon">bytes</th><th class="rule">RULE</th><th class="cmd">CMD</th></tr>
+				</thead>
+				<tbody id="main">
+
+				</tbody>
 			</table>
 
 			<div class="tools">

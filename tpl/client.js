@@ -1,9 +1,10 @@
 var channel = "";
 var table = "";
 var webSocket;
+var chainPath = [];
 
 $(document).ready(function(){
-	rules.showList("input", "filter");
+	rules.showListWithPath("input", "filter");
 	
 	$.get("/chainlist", function(data) {
 		var arr = JSON.parse(data);
@@ -66,7 +67,7 @@ var parser = {
 		
 		var arr = JSON.parse(data);
 
-		$("#main").html('<tr><th class="id">ID</th><th class="mon">pkts</th><th class="mon">bytes</th><th class="rule">RULE</th><th class="cmd">CMD</th></tr>');
+		$("#main").html('');
 
 		var index = 0;
 		for(var line in arr) {
@@ -82,14 +83,7 @@ var parser = {
 	
 	makeRuleTpl: function (index, text) {
 		var ntext = this.makeRuleText(text);
-
-		return "<tr>" +
-				'<td class="rowcenter" id="lindx">' + index + "</td>" +
-				'<td class="rowright" id="pkts' + index + '"></td>' +
-				'<td class="rowright" id="bytes' + index + '"></td>' +
-				'<td class="row" id="rule' + index + '"><span class="edittext">' + ntext + '<img class="edit" src="/img/edit.png" onclick="parser.editRule(' + index + ')"/></spawn></td>' +
-				(index ? '<td class="rowcenter"><a href="#" onclick="return rules.remove(' + index + ');" title="Delete"><img src="/img/delete.png"/></a>' + "</td>" : '<td class="row"></td>') +
-				"</tr>";
+		return tpl.ruleRow(index, ntext);
 	},
 	
 	FIN_RULES: {DROP:1, ACCEPT:1, LOG:1, TCPMSS:1, RETURN:1, DNAT:1, SNAT:1, MASQUERADE:1, CONNMARK:1, TOS:1, TTL:1},
@@ -103,6 +97,9 @@ var parser = {
 			.replace(/(-m comment --comment) "(.*)" (.*)/g, function(str, param, comment, other){
 				return other + ' <span class="ipt-comment">//' + comment + "</span>";
 			})
+			.replace(/(-m comment --comment) ([\w]+) (.*)/g, function(str, param, comment, other){
+				return other + ' <span class="ipt-comment">//' + comment + "</span>";
+			})
 			// network interfaces
 			.replace(/(-[o|i]) ([a-z0-9]+)/g, function(str, dir, int){
 				return dir + ' <b title="' + int + '">' + (window._settings.LANS[int] || int) + '</b>';
@@ -114,13 +111,13 @@ var parser = {
 				return param + ' <span class="ipt-port" title="' + port + '">' + (window._settings.PORTS[port] || port) + '</span>';
 			})
 			// rule chain
-			.replace(/-j (ACCEPT|DROP)/g, '-j <span class="ipt-$1">$1</span>')
+			.replace(/-j (ACCEPT|DROP)($| )/g, '-j <span class="ipt-$1">$1</span>$2')
 			.replace(/-j ([A-Z\_0-9]+)/g, function(str, name) {
 				var lname = name.toLowerCase();
 				if(parser.FIN_RULES[name]) {
 					return "-j " + name;
 				}
-				return '-j <a class="ipt-channel" href="javascript: rules.showList(\'' + lname + '\', \'' + table + '\');">' + name + "</a>";
+				return '-j <a class="ipt-channel" href="javascript: rules.showListWithPath(\'' + lname + '\', \'' + table + '\', true);">' + name + "</a>";
 			});
 
 		return text;
@@ -170,7 +167,7 @@ var rules = {
 	showList: function (name, chainTable) {
 		channel = name;
 		table = chainTable;
-		
+
 		$(".itemselect").removeClass("itemselect").addClass("item");
 		$(".item").each(function(index, obj) {
 			if($(obj).text() === name.toUpperCase()) {
@@ -180,6 +177,42 @@ var rules = {
 
         parser.endEditRule();
 		$.get("channel?c=" + channel + "&t=" + table, parser.parseChannels);
+	},
+
+	showListWithPath: function (name, chainTable, addPath) {
+		rules.showList(name, chainTable);
+
+		var obj = {chain: name.toUpperCase(), table: chainTable};
+		if(addPath) {
+			chainPath.push(obj);
+		}
+		else {
+			chainPath = [obj];
+		}
+
+		rules.updatePath();
+	},
+
+	updatePath: function() {
+		var code = "";
+		for(var o of chainPath) {
+			if(code) code += " / ";
+			code += '<a class="ipt-channel" href="javascript: rules.showBackPath(\'' + o.chain + '\')">' + o.chain + (code ? "" : "[" + o.table + "]") + "</a>";
+		}
+		tools.setChainPath(code);
+	},
+
+	showBackPath: function (name) {
+		var index = 0;
+		for(var o of chainPath) {
+			index++;
+			if(o.chain == name) {
+				chainPath = chainPath.slice(0, index);
+				rules.showList(o.chain, o.table);
+				break;
+			}
+		}
+		rules.updatePath();
 	},
 	
 	remove: function (index) {
@@ -621,5 +654,9 @@ var tools = {
 		$("#dump").html("");
 		tools.closeWS(JSON.stringify({name: "closedump"}));
 		tools.initWS(JSON.stringify({name: "dump", eth: $("#eth").val(), src: $("#src").val(), dst: $("#dst").val(), port: $("#port").val()}));
+	},
+
+	setChainPath: function(path) {
+		$("#chainpath").html(path);
 	}
 };
