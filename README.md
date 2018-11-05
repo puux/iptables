@@ -28,3 +28,10 @@ node server.js
 * open and change config.scss
 * compile: scss --sourcemap=none style.scss ../theme/MyTheme.css
 * select theme in Settings->Theme
+
+### Default user and password ###
+
+User: admin
+Pass: (empty)
+
+You can change this here https://github.com/puux/iptables/blob/master/handlers.js#L14
