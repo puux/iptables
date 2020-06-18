@@ -1,0 +1,261 @@
+$color1: #E0FBFC;
+$color2: #C2DFE3;
+$color3: #9DB4C0;
+$color4: #5C6B73;
+$color5: #253237;
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-size: 12px;
+    background-color: $color1;
+}
+
+// rule highlight
+$ruleDrop: red;
+$ruleAccept: green;
+$ruleNetworkAddress: gray;
+$rulePort: blue;
+$ruleComment: blue;
+$ruleChannel: blue;
+
+// Highlight styles
+.ipt-DROP {
+	color: $ruleDrop;
+}
+
+.ipt-ACCEPT {
+	color: $ruleAccept;
+}
+
+.ipt-net {
+	color: $ruleNetworkAddress;
+}
+
+.ipt-port {
+	color: $rulePort;
+}
+
+.ipt-channel {
+    color: $ruleChannel;
+}
+
+.ipt-comment {
+	color: $ruleComment;
+	font-style: italic;
+}
+
+.page {
+    height: 100%;
+    display: flex;
+    
+    .menu {
+        height: 100%;
+        background-color: $color3;
+
+        .left-button {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+
+            &:hover { background-color: $color5; }
+        }
+    }
+    .filters {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+
+        .chain-list {
+            display: flex;
+            align-self: stretch;
+            background-color: $color3;
+            flex-shrink: 0;
+
+            & > div {
+                padding: 5px 15px;
+                cursor: pointer;
+                position: relative;
+
+                .selected {
+                    &::before {
+                        content: ' ';
+                        border-bottom: 1px solid $color5;
+                        width: 100%;
+                        height: 2px;
+                        position: absolute;
+                        left: 0;
+                        bottom: 0;
+                    }
+                }
+                &:hover {
+                    color: white;
+                    background-color: $color4;
+                    // .tables { display: block; }
+                }
+                &[visible]:hover {
+                    .tables { display: block; }
+                }
+                .tables {
+                    position: absolute;
+                    background-color: $color4;
+                    display: none;
+                    z-index: 20;
+                    left: 0;
+                    top: 24px;
+                    min-width: 100%;
+                    
+                    div {
+                        padding: 5px 15px;
+                        white-space: nowrap;
+
+                        &:hover {
+                            background-color: $color5;
+                        }
+                    }
+                }
+            }
+        }
+
+        .navigate {
+            background-color: $color2;
+            display: flex;
+            color: gray;
+            align-self: stretch;
+            flex-shrink: 0;
+
+            & > div {
+                padding: 5px;
+                cursor: pointer;
+
+                &::after {
+                    content: ' / ';
+                    margin-left: 4px;
+                }
+                &:last-child {
+                    padding: 0;
+                    width: 26px;
+                    font-size: 21px;
+                    text-align: center;
+                    position: relative;
+
+                    &::after { display: none; }
+                }
+                &:hover { color: black; }
+            }
+        }
+
+        input, select {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 12px;
+        }
+        .items {
+            align-self: stretch;
+            
+            .header {
+                background-color: $color5;
+                color: white;
+            }
+            .item {
+                display: flex;
+                position: relative;
+                
+                & > div {
+                    border-right: 1px solid $color2;
+                    border-bottom: 1px solid $color2;
+                    padding: 5px 4px 2px 4px;
+                }
+                .rule-editor {
+                    border-right: 1px solid $color2;
+                    border-bottom: 1px solid $color2;
+                }
+                .controls {
+                    display: none;
+                    position: absolute;
+                    right: 0;
+                    top: 100%;
+                    z-index: 10;
+
+                    & > .fa {
+                        padding: 5px;
+                        cursor: pointer;
+                        color: $color4;
+                        background-color: $color2;
+                        border-radius: 20px;
+                        box-shadow: 1px 1px 3px 0px #0000007d;
+                        margin: 2px;
+                        &:hover {
+                            color: $color5;
+                        }
+                    }
+                }
+                .item-check {
+                    width: 30px;
+                    padding: 0;
+                    color: $color4;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                .item-id {
+                    width: 30px;
+                    text-align: center;
+                }
+                .item-pack, .item-bytes {
+                    width: 60px;
+                    text-align: center;
+                }
+                .item-rule {
+                    flex-grow: 1;
+                    position: relative;
+                    min-width: 400px;
+                }
+            }
+            .row {
+                &[selected] {
+                    background-color: $color3 !important;
+                }
+                &:hover {
+                    background-color: lighten($color: $color2, $amount: 10%);
+                    .controls { display: flex; }
+                }
+            }
+            .bottom-panel {
+                background-color: $color2;
+            }
+        }
+    }
+}
+
+.rule-editor {
+    outline-color: $color2;
+}
+
+.std-dialog {
+    background-color: $color1;
+    & > .dialog-title {
+        background-color: $color3;
+    }
+}
+
+button {
+    color: $color5;
+    background-color: $color3;
+    padding: 7px;
+    border: 0;
+    outline: 0;
+    &:hover {
+        color: $color1;
+        background-color: $color5;
+    }
+}
+
+.splitpanes__splitter {
+    height: 3px;
+    background-color: $color3;
+}

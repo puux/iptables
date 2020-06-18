@@ -1,0 +1,19 @@
+{
+  "name": "iptables-server",
+  "version": "1.1.0",
+  "description": "iptables WEB gui",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "author": "Puux",
+  "license": "GPL-2.0",
+  "devDependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.4"
+  },
+  "dependencies": {
+    "ws": "^7.3.0"
+  }
+}
