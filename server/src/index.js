@@ -110,7 +110,7 @@ app.post("/settings", (request, response) => {
             send(response, {error: '', data: { options: settings.data, customChannels }})
         }
         catch (error) {
-            send(response, {error: error.message, data: {}})
+            send(response, {error: '', data: { options: settings.data, customChannels: [] }})
         }
     }
 });
@@ -152,6 +152,48 @@ app.post("/load", (request, response) => {
         if(stderr)
             console.log("Error: ", stderr)
         send(response, {error: stderr})
+    });
+});
+
+var syslog = {
+    clientID: 1,
+    clients: {},
+    proc: null,
+    add(client) {
+        let id = this.clientId++
+        this.clients[id] = client;
+        return id;
+    },
+    remove(clientId) {
+        delete this.clients[clientId];
+    },
+    open() {
+        syslog.proc = proc.spawn("tail", ["-f", "/var/log/syslog"]);
+        syslog.proc.stdout.on('data', function (lines) {
+            let textData = JSON.stringify({
+                lines: lines.toString().trim().split("\n")
+            });
+            let data = Buffer.from("data: " + textData + "\n\n", 'utf8');
+            for(let clientID in syslog.clients)
+                syslog.clients[clientID].write(data);
+        });
+    },
+    close() {
+        syslog.proc.kill('SIGHUP');
+		syslog.proc = null;
+    }
+}
+
+app.get("/syslog", (request, response) => {
+    if(syslog.proc == null)
+        syslog.open()
+
+    response.writeHead(200, {'Content-Type': 'text/event-stream'});
+    request.socket.setTimeout(1000 * 60 * 60); // 1 Час
+
+    let clientId = syslog.add(response);
+    request.on('close', () => {
+        syslog.remove(clientId);
     });
 });
 

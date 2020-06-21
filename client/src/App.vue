@@ -22,11 +22,16 @@
                         @goto="onGotoChain"
                         />
                 </pane>
-                <pane size="10">
-                    <div style="display: flex;">
-                        <div>History</div>
-                        <div>Syslog</div>
-                        <div>TcpDump</div>
+                <pane size="10"  style="display: flex; flex-direction: column;">
+                    <div class="tab-controls">
+                        <Tabs :tabs="['History', 'Syslog', 'TcpDump']" v-model="activeTabIndex"/>
+                        <v-icon class="fa" name="trash" @click="clearLog"/>
+                    </div>
+                    <div v-if="activeTabIndex == 0" class="command-log">
+                        <div v-for="(line, i) in cmdHistory" :key="i">{{line}}</div>
+                    </div>
+                    <div v-if="activeTabIndex == 1" class="command-log">
+                        <div v-for="(line, i) in syslog" :key="i">{{line}}</div>
                     </div>
                 </pane>
             </splitpanes>
@@ -46,6 +51,7 @@ import axios from "axios";
 import ChainList from './components/ChainList';
 import Navigator from './components/Navigator';
 import Table from './components/Table';
+import Tabs from './components/Tabs';
 import InputDialog from './components/dialogs/InputDialog';
 import SelectChainDialog from './components/dialogs/SelectChainDialog';
 import SettingsDialog from './components/dialogs/SettingsDialog';
@@ -56,6 +62,7 @@ export default {
         ChainList,
         Navigator,
         Table,
+        Tabs,
         InputDialog,
         SelectChainDialog,
         SettingsDialog
@@ -133,6 +140,10 @@ export default {
             history: [ { chain: 'INPUT', table: 'filter' } ],
             inputDlg: { show: true },
 
+            activeTabIndex: 0,
+            cmdHistory: [],
+            syslog: [],
+
             moveRuleList: null,
             options: {net: [], ports: []}
         };
@@ -150,6 +161,12 @@ export default {
         }
     },
     methods: {
+        clearLog() {
+            if (this.activeTabIndex == 0)
+                this.cmdHistory = []
+            else if (this.activeTabIndex == 1)
+                this.syslog = []
+        },
         onSettingsDialog() {
             this.$modal.show('settings');
         },
@@ -179,8 +196,11 @@ export default {
         },
         onQueryCommand(list) {
             let prepared = []
-            for(let rule of list)
-                prepared.push('-t ' + this.selectedTable + ' ' + rule.replace('%CHAIN%', this.selectedChain))
+            for(let rule of list) {
+                let cmd = '-t ' + this.selectedTable + ' ' + rule.replace('%CHAIN%', this.selectedChain);
+                prepared.push(cmd);
+                this.cmdHistory.push(cmd);
+            }
             this.query(prepared, () => this.loadRules())
         },
         onSaveRules() {
@@ -356,6 +376,16 @@ export default {
     mounted() {
         this.loadSettings()
         //setInterval(() => this.loadRules(), 1000)
+
+        var eventSrc = new EventSource("http://localhost:1337/syslog");
+        eventSrc.addEventListener("message", (event) => {
+            var data = JSON.parse(event.data);
+            for(let l of data.lines)
+                this.syslog.push(l);
+        }, false);
+        eventSrc.addEventListener("error", (event) => {
+            // Сообщаем о проблеме с подключением
+        }, false);
     }
 };
 </script>
@@ -365,5 +395,25 @@ export default {
 
     .vue-notification {
         box-shadow: 1px 1px 3px 0px #0000007d;
+    }
+
+    .tab-controls {
+        display: flex;
+        align-items: center;
+        & > .tabs {
+            flex-grow: 1;
+        }
+        & > .fa-icon {
+            cursor: pointer;
+            padding: 0 5px;
+        }
+    }
+    .command-log {
+        overflow: auto;
+        flex-grow: 1;
+        & > div {
+            padding: 2px;
+            &:hover { background-color: silver; }
+        }
     }
 </style>

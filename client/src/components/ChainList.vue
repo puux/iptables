@@ -1,7 +1,7 @@
 <template>
     <div class="chain-list">
         <div v-for="(menu,i) in list" :key="i" @click="select(menu.chain)" :visible="!menu.chain || selectedChain && selectedChain.id == menu.chain.id" @mouseleave="selectedChain = null">
-            <div :class="{selected: menu.chain && chain == menu.chain.id}" @mouseenter="onMouseEnter(menu.chain)" @mouseleave="onMouseLeave">{{ menu.title }}</div>
+            <div class="chain-item" :class="{selected: menu.chain && chain == menu.chain.id}" @mouseenter="onMouseEnter(menu.chain)" @mouseleave="onMouseLeave">{{ menu.title }}</div>
             <div class="tables">
                 <div v-for="(item,i) in menu.items" :key="i" @click.stop="select(item.chain)">{{ item.title }}</div>
             </div>
@@ -30,7 +30,8 @@ export default {
             clearTimeout(this.timer)
         },
         select (chain) {
-            this.$emit('select', chain)
+            if (chain)
+                this.$emit('select', chain)
         }
     }
 }

@@ -77,9 +77,11 @@ $ruleChannel: blue;
             background-color: $color3;
             flex-shrink: 0;
 
-            & > div {
+            .chain-item {
                 padding: 5px 15px;
                 cursor: pointer;
+            }
+            & > div {
                 position: relative;
 
                 .selected {
@@ -227,6 +229,13 @@ $ruleChannel: blue;
             }
             .bottom-panel {
                 background-color: $color2;
+            }
+        }
+
+        .tab-controls {
+            background-color: $color2;
+            .fa-icon {
+                color: $color4;
             }
         }
     }
