@@ -92,7 +92,7 @@ export default {
         preparedRules() {
             let list = []
             for(let rule of this.rules) {
-                let args = rule.rule.match(/-j ([A-Z\_0-9]+)/);
+                let args = rule.rule.match(/-j ([a-zA-Z\_0-9]+)/);
                 list.push(Object.assign(rule, {
                     customChain: args && this.isUserChain(args[1]) ? args[1] : ''
                 }))
@@ -219,7 +219,7 @@ export default {
 			})
 			// rule chain
 			.replace(/-j (ACCEPT|DROP)($| )/g, '-j <span class="ipt-$1">$1</span>$2')
-			.replace(/-j ([A-Z\_0-9]+)/g, (str, name) => {
+			.replace(/-j ([a-zA-Z\_0-9]+)/g, (str, name) => {
 				if(!this.isUserChain(name)) {
 					return "-j " + name;
 				}
