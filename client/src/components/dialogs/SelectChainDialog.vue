@@ -1,35 +1,28 @@
 <template>
     <BaseDialog :name="name" width="400px"
         @close="$modal.hide(name)"
-        @ok="$emit('ok', selected, $refs.input.value, $refs.list.value)"
+        @ok="$emit('ok', channel)"
         title="Select or create new chain"
         :buttons="buttons">
 
         <div class="selected-item">
-            <div>Choose existing chain</div>
-            <v-select
-                :reduce="chan => chan.chain.id"
+            <ChannelInput
+                :chainList="chainList"
                 v-model="channel"
-                label="title"
-                :options="chainList"
-                placeholder="select chain"
-                max-height="200px"
-                append-to-body/>
-        </div>
-        <div class="selected-item">
-            <div>Create new chain</div>
-            <div><input placeholder="chain name" ref="input"></div>
+            />
         </div>
     </BaseDialog>
 </template>
 
 <script>
 import BaseDialog from './BaseDialog';
+import ChannelInput from '../ChannelInput';
 
 export default {
     name: 'SelectChainDialog',
     components: {
-        BaseDialog
+        BaseDialog,
+        ChannelInput
     },
     props: {
         name: {

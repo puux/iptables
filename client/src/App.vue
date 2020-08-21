@@ -269,18 +269,19 @@ export default {
                 this.loadRules()
             })
         },
-        onMoveToChain(selectedIndex, chainName, chainIndex) {
+        onMoveToChain(chainName) {
             let commands = []
             let targetChain, targetTable
+            let item = this.userChainList.find((a) => a.chain.id == chainName && a.chain.table == this.selectedTable)
             // create new chain if need
-            if(selectedIndex == 1) {
+            if(item) {
+                targetChain = item.chain.id
+                targetTable = item.chain.table
+            }
+            else {
                 commands.push('-t ' + this.selectedTable + ' -N ' + chainName)
                 targetChain = chainName
                 targetTable = this.selectedTable
-            }
-            else {
-                targetChain = this.userChainList[chainIndex].chain.id
-                targetTable = this.userChainList[chainIndex].chain.table
             }
             // add rules to target chain
             for(let rule of this.moveRuleList)
