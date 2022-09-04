@@ -1,3 +1,5 @@
+var ipport = 1337;
+var wsport = 8001;
 var http = require('http');
 var handle = require('./handlers');
 var url = require("url");
@@ -48,8 +50,8 @@ http.createServer(function handler(req, res) {
 			}
 		});
     }
-}).listen(1337);
-console.log('Server running at http://*:1337/');
+}).listen(ipport);
+console.log(`Server running at http://*:${ipport}/`);
 
 
 // ------------------ WebSocket ------------------------------------------------
@@ -113,4 +115,4 @@ var server = ws.createServer(function (conn) {
 		closeLogs();
 		closeDump();
 	});
-}).listen(8001);
+}).listen(wsport);
