@@ -2,11 +2,11 @@ iptables WEB gui
 
 ![ScreenShot](http://i.mcgl.ru/RGGJv4MAvA)
 
-### Howto install ###
+### How to install ###
 
 In first time you need to Download and install Node.js
 
-### Howto use ###
+### How to use ###
 
 * Clone repository:
 ```bash
@@ -22,7 +22,7 @@ node server.js
 ```
 * Open browser and goto http://127.0.0.1:1337/
 
-### Howto create own theme ###
+### How to create own theme ###
 
 * cd ./tpl/styles/
 * open and change config.scss
